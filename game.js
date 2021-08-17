@@ -2,11 +2,18 @@ var context, controller, player, loop
 
 context = document.querySelector('canvas').getContext('2d')
 
+context.webkitImageSmoothingEnabled = false;
+context.mozImageSmoothingEnabled = false;
+context.imageSmoothingEnabled = false;
+
 context.canvas.width = 256
 context.canvas.height = 224
 
-// context.canvas.style.height = (window.screen.availWidth/context.canvas.width)*context.canvas.width;
-// context.canvas.style.width = (window.screen.availWidth/context.canvas.height)*context.canvas.height;
+context.canvas.style.height = context.canvas.height;
+context.canvas.style.width = context.canvas.width;
+
+playerImage = new Image();
+playerImage.src = "mainChar16x16.png";
 
 player = {
   height: 16,
@@ -75,16 +82,8 @@ loop = function() {
 
   context.fillStyle = '#202020'
   context.fillRect(0, 0, 256, 224)
-  context.fillStyle = '#ff0000'
-  context.beginPath()
-  context.rect(player.x, player.y, player.width, player.height)
-  context.fill()
-  context.strokeStyle = '#ff0000'
-  context.lineWidth = 4
-  context.beginPath()
-  context.moveTo(0, 224)
-  context.lineTo(256, 224)
-  context.stroke()
+  context.drawImage(playerImage, player.x, player.y);
+
 
   window.requestAnimationFrame(loop)
 }

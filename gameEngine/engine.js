@@ -8,7 +8,7 @@ context.canvas.height = 600
 
 // Add Player Image
 playerImage = new Image();
-playerImage.src = "mainChar16x16.png";
+playerImage.src = "./assets/mainChar16x16.png";
 
 class Player {
   constructor() {

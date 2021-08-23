@@ -1,44 +1,27 @@
 var context, controller, player, loop
 
-var frameCount = 0;
-var fps, fpsInterval, startTime, now, then, elapsed;
-
-
-// initialize the timer variables and start the animation
-
-function startAnimating(fps) {
-    fpsInterval = 1000 / fps;
-    then = Date.now();
-    startTime = then;
-    animate();
-}
-
-
-
+//Setup Canvas
 context = document.querySelector('canvas').getContext('2d')
-
-context.webkitImageSmoothingEnabled = false;
-context.mozImageSmoothingEnabled = false;
-context.imageSmoothingEnabled = false;
-
 context.canvas.width = 800
 context.canvas.height = 600
 
-context.canvas.style.width = context.canvas.width;
-context.canvas.style.height = context.canvas.height;
 
-
+// Add Player Image
 playerImage = new Image();
 playerImage.src = "mainChar16x16.png";
 
-player = {
-  height: 16,
-  width: 16,
-  x: 0,
-  x_velocity: 0,
-  y: 0,
-  y_velocity: 0,
+class Player {
+  constructor() {
+    this.height = 16,
+    this.width = 16,
+    this.x = 0,
+    this.x_velocity = 0,
+    this.y = 0,
+    this.y_velocity = 0
+  }
 }
+
+var player = new Player;
 
 controller = {
   left: false,
@@ -64,70 +47,73 @@ controller = {
   },
 }
 
-var lastLoop, thisLoop;
-
-loop = function() {
-  lastLoop = performance.now();
-  if(lastLoop - thisLoop > 10) {
-    if (controller.up) {
-      player.y_velocity -= 0.5
-    }
-    if (controller.down) {
-      player.y_velocity += 0.5
-    }
-    if (controller.left) {
-      player.x_velocity -= 0.5
-    }
-    if (controller.right) {
-      player.x_velocity += 0.5
-    }
-  
-    // player.y_velocity += 1.5 //Gravity
-    player.x += player.x_velocity
-    player.y += player.y_velocity
-    player.x_velocity *= 0.9
-    player.y_velocity *= 0.9 
-  
-  
-    // bottom wall
-    if (player.y > context.canvas.height - 16) {
-      player.y = context.canvas.height - 16
-      player.y_velocity = 0
-    }
-  
-    // top wall
-    if (player.y < 0) {
-      player.y = 0
-      player.y_velocity = 0
-    }
-  
-    // left wall
-    if (player.x <= 0) {
-      player.x = 0
-      player.x_velocity = 0
-    }
-  
-    // right wall
-    if (player.x >= context.canvas.width - 16) {
-      player.x = context.canvas.width - 16
-      player.x_velocity = 0
-    }
-  
-    context.fillStyle = '#202020'
-    context.fillRect(0, 0, context.canvas.width, context.canvas.height)
-    context.drawImage(playerImage, player.x, player.y);
-    thisLoop = performance.now();
-  }
-  window.requestAnimationFrame(loop)
+function gameLoop() {
+    updateData();
+    renderData();
+    window.requestAnimationFrame(gameLoop)
 }
 
+function updateData() {
+  if (controller.up) {
+    player.y_velocity -= 0.5
+  }
+  if (controller.down) {
+    player.y_velocity += 0.5
+  }
+  if (controller.left) {
+    player.x_velocity -= 0.5
+  }
+  if (controller.right) {
+    player.x_velocity += 0.5
+  }
+
+  // player.y_velocity += 1.5 //Gravity
+  player.x += player.x_velocity
+  player.y += player.y_velocity
+  player.x_velocity *= 0.9
+  player.y_velocity *= 0.9 
+
+
+  // bottom wall
+  if (player.y > context.canvas.height - 16) {
+    player.y = context.canvas.height - 16
+    player.y_velocity = 0
+  }
+
+  // top wall
+  if (player.y < 0) {
+    player.y = 0
+    player.y_velocity = 0
+  }
+
+  // left wall
+  if (player.x <= 0) {
+    player.x = 0
+    player.x_velocity = 0
+  }
+
+  // right wall
+  if (player.x >= context.canvas.width - 16) {
+    player.x = context.canvas.width - 16
+    player.x_velocity = 0
+  }
+}
+
+function renderData() {
+  context.fillStyle = '#202020'
+  context.fillRect(0, 0, context.canvas.width, context.canvas.height)
+  context.drawImage(playerImage, player.x, player.y);
+}
+
+// key Event listener
 window.addEventListener('keydown', controller.keyListener)
 window.addEventListener('keyup', controller.keyListener)
 
+
+// start game loop
 function gameStart() {
   thisLoop = performance.now();
-  window.requestAnimationFrame(loop)
+  window.requestAnimationFrame(gameLoop)
 }
-
 gameStart();
 

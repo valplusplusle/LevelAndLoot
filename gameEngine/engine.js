@@ -1,18 +1,15 @@
 var context, controller, player, loop
 
-//Setup Canvas
+// Setup Canvas
 context = document.querySelector('canvas').getContext('2d')
 context.canvas.width = 800
 context.canvas.height = 600
 
+// calculate screen size
 var canvas = document.getElementById('screen')
-
-
 canvas.style.height = window.innerHeight + 'px';
-
-var test = (window.innerHeight / 600) * 800
-console.log(test)
-canvas.style.width = test + 'px';
+var variableResolution = (window.innerHeight / 600) * 800
+canvas.style.width = variableResolution + 'px';
 
 
 class Player {
@@ -20,18 +17,17 @@ class Player {
   x = 0;
   y = 0;
 
-  idleImage1 = new Image();
-  idleImage2 = new Image();
+  idleImage = new Image();
   
   constructor() {
-    this.height = 16,
-    this.width = 16,
+    this.height = 48,
+    this.width = 48,
     this.x_velocity = 0,
     this.y_velocity = 0,
-    this.state = 'idle'
+    this.state = 'idle',
+    this.jumping = true,
+    this.idleImage.src = "./assets/dd/idle1_1.png"
 
-    this.idleImage1.src = "./assets/dd/idle1_1.png";
-    this.idleImage2.src = "./assets/dd/idle1_2.png";
   }
 
   changeState(newState) {
@@ -43,7 +39,16 @@ class Player {
   }
 
   renderPlayer() {
-    context.drawImage(this.idleImage1, this.x, this.y);
+    if(this.state === 'idle') {
+      if(this.idleImage.src === "./assets/dd/run_1.png") {
+        context.drawImage(this.idleImage, this.x, this.y);
+        this.idleImage.src = "./assets/dd/idle1_1.png";
+      } else {
+        context.drawImage(this.idleImage, this.x, this.y);
+      }
+
+    }
+    
   }
 }
 
@@ -80,8 +85,9 @@ function gameLoop() {
 }
 
 function updateData() {
-  if (controller.up) {
-    player.y_velocity -= 0.5
+  if (controller.up && player.jumping == false) {
+    player.y_velocity -= 20
+    player.jumping = true
   }
   if (controller.down) {
     player.y_velocity += 0.5
@@ -93,7 +99,7 @@ function updateData() {
     player.x_velocity += 0.5
   }
 
-  // player.y_velocity += 1.5 //Gravity
+  player.y_velocity += 1.5 //Gravity
   player.x += player.x_velocity
   player.y += player.y_velocity
   player.x_velocity *= 0.9
@@ -101,10 +107,12 @@ function updateData() {
 
 
   // bottom wall
-  if (player.y > context.canvas.height - 16) {
-    player.y = context.canvas.height - 16
+  if (player.y > context.canvas.height - 48) {
+    player.jumping = false
+    player.y = context.canvas.height - 48
     player.y_velocity = 0
   }
+
 
   // top wall
   if (player.y < 0) {
@@ -119,8 +127,8 @@ function updateData() {
   }
 
   // right wall
-  if (player.x >= context.canvas.width - 16) {
-    player.x = context.canvas.width - 16
+  if (player.x >= context.canvas.width - 48) {
+    player.x = context.canvas.width - 48
     player.x_velocity = 0
   }
 }

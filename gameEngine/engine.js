@@ -5,6 +5,15 @@ context = document.querySelector('canvas').getContext('2d')
 context.canvas.width = 800
 context.canvas.height = 600
 
+var canvas = document.getElementById('screen')
+
+
+canvas.style.height = window.innerHeight + 'px';
+
+var test = (window.innerHeight / 600) * 800
+console.log(test)
+canvas.style.width = test + 'px';
+
 
 // Add Player Image
 playerImage = new Image();

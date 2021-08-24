@@ -15,18 +15,35 @@ console.log(test)
 canvas.style.width = test + 'px';
 
 
-// Add Player Image
-playerImage = new Image();
-playerImage.src = "./assets/mainChar16x16.png";
-
 class Player {
+  state = 'idle';
+  x = 0;
+  y = 0;
+
+  idleImage1 = new Image();
+  idleImage2 = new Image();
+  
   constructor() {
     this.height = 16,
     this.width = 16,
-    this.x = 0,
     this.x_velocity = 0,
-    this.y = 0,
-    this.y_velocity = 0
+    this.y_velocity = 0,
+    this.state = 'idle'
+
+    this.idleImage1.src = "./assets/dd/idle1_1.png";
+    this.idleImage2.src = "./assets/dd/idle1_2.png";
+  }
+
+  changeState(newState) {
+    this.state = newState;
+  }
+
+  updatePlayer() {
+
+  }
+
+  renderPlayer() {
+    context.drawImage(this.idleImage1, this.x, this.y);
   }
 }
 
@@ -111,7 +128,7 @@ function updateData() {
 function renderData() {
   context.fillStyle = '#202020'
   context.fillRect(0, 0, context.canvas.width, context.canvas.height)
-  context.drawImage(playerImage, player.x, player.y);
+  player.renderPlayer();
 }
 
 // key Event listener

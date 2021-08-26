@@ -15,8 +15,8 @@ canvas.style.width = variableResolution + 'px';
 class Player {
   state = 'idle';
   lastState = 'idle';
-  x = 0;
-  y = 0;
+  x = 400;
+  y = 550;
 
   sprite = new Image();
   frame = 0;
@@ -65,10 +65,10 @@ class Player {
         context.drawImage(this.sprite, 150, 144, 50, 48, this.x, this.y, 50,48);
       } else if (timeDifference > 400 && timeDifference <= 500){
         context.drawImage(this.sprite, 200, 144, 50, 48, this.x, this.y, 50,48);
-      } else if (timeDifference > 500 && timeDifference <= 600){
-         context.drawImage(this.sprite, 250, 144, 50, 48, this.x, this.y, 50,48);
+      } else if (timeDifference > 500 && timeDifference < 600){
+          context.drawImage(this.sprite, 250, 144, 50, 48, this.x, this.y, 50,48);
       }
-      if (timeNow-this.frame >= 600) {this.frame = Date.now();}
+      if (timeNow-this.frame >= 500) {this.frame = Date.now();}
     }
     
   }
@@ -108,8 +108,9 @@ function gameLoop() {
 
 function updateData() {
   if (controller.up && player.jumping == false) {
-    player.y_velocity -= 20
-    player.jumping = true
+    // player.y_velocity -= 20
+    // player.jumping = true
+    player.y_velocity -= 0.5
   }
   if (controller.down) {
     player.y_velocity += 0.5
@@ -123,7 +124,7 @@ function updateData() {
     player.state = 'run';
   }
 
-  player.y_velocity += 0.5 //Gravity
+  // player.y_velocity += 0.5 //Gravity
   player.x += player.x_velocity
   player.y += player.y_velocity
   player.x_velocity *= 0.5

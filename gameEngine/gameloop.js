@@ -43,10 +43,12 @@ function updateData() {
   if (controller.left) {
     player.x_velocity -= 0.5
     player.state = 'run';
+    player.direction = 'left';
   }
   if (controller.right) {
     player.x_velocity += 0.5
     player.state = 'run';
+    player.direction = 'right';
   }
 
   // player.y_velocity += 0.5 //Gravity

@@ -3,6 +3,7 @@ class Player {
     lastState = 'idle';
 
     direction = 'right'
+    name = 'foobarbaz'
 
     x = 400;
     y = 550;
@@ -27,6 +28,12 @@ class Player {
     }
 
     renderPlayer() {
+        // name render
+        context.font = "10px Arial";
+        context.fillStyle = "white";
+        context.textAlign = "center";
+        context.fillText('<'+this.name+'>', this.x+25, this.y);
+
         // Init animation timer on state change
         if (this.lastState != this.state) { this.frame = 0; this.lastState = this.state };
         if (this.frame == 0) { this.frame = Date.now(); };
@@ -95,6 +102,5 @@ class Player {
             }
             if (timeDifference >= 500) { this.frame = Date.now(); }
         }
-
     }
 }

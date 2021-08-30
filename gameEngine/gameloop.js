@@ -1,5 +1,8 @@
 
 var player = new Player;
+var lastTime = (new Date()).getTime();
+var currentTime = 0;
+var delta = 0;
 
 controller = {
   left: false,
@@ -26,27 +29,31 @@ controller = {
 }
 
 function gameLoop() {
+    currentTime = (new Date()).getTime();
+    delta = (currentTime - lastTime) / 1000;
+    console.log(delta)
     updateData();
     renderData();
+    lastTime = currentTime;
     window.requestAnimationFrame(gameLoop)
 }
 
 function updateData() {
   if (controller.up) {
-    player.y_velocity -= 0.5
+    player.y_velocity -= 200 * delta
     player.state = 'run';
   }
   if (controller.down) {
-    player.y_velocity += 0.5
+    player.y_velocity += 200 * delta
     player.state = 'run';
   }
   if (controller.left) {
-    player.x_velocity -= 0.5
+    player.x_velocity -= 200 * delta 
     player.state = 'run';
     player.direction = 'left';
   }
   if (controller.right) {
-    player.x_velocity += 0.5
+    player.x_velocity += 200 * delta
     player.state = 'run';
     player.direction = 'right';
   }
@@ -54,8 +61,8 @@ function updateData() {
   // player.y_velocity += 0.5 //Gravity
   player.x += player.x_velocity
   player.y += player.y_velocity
-  player.x_velocity *= 0.5
-  player.y_velocity *= 0.5 
+  player.x_velocity *= 0.5 * delta
+  player.y_velocity *= 0.5 * delta
 
 
   // bottom wall

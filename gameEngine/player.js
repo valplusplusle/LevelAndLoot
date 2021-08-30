@@ -5,6 +5,8 @@ class Player {
     direction = 'right'
     name = 'foobarbaz'
 
+    class = 'dd'
+
     x = 400;
     y = 550;
 
@@ -40,12 +42,32 @@ class Player {
         const timeNow = Date.now();
         const timeDifference = timeNow - this.frame;
 
-        // check direction
-        if(this.direction === 'right') { 
-            this.sprite.src = "./assets/dd/dd_sprite_right.png"
+        // check direction and class
+        if(this.class === 'dd') {
+            if(this.direction === 'right') {
+                this.sprite.src = "./assets/dd/dd_sprite_right.png"
+            }
+            if(this.direction === 'left') { 
+                this.sprite.src = "./assets/dd/dd_sprite_left.png"
+            }
         }
-        if(this.direction === 'left') { 
-            this.sprite.src = "./assets/dd/dd_sprite_left.png"
+
+        if(this.class === 'heal') {
+            if(this.direction === 'right') {
+                this.sprite.src = "./assets/heal/heal_sprite_right.png"
+            }
+            if(this.direction === 'left') { 
+                this.sprite.src = "./assets/heal/heal_sprite_left.png"
+            }
+        }
+
+        if(this.class === 'tank') {
+            if(this.direction === 'right') {
+                this.sprite.src = "./assets/tank/tank_sprite_right.png"
+            }
+            if(this.direction === 'left') { 
+                this.sprite.src = "./assets/tank/tank_sprite_left.png"
+            }
         }
 
         // idle animaiton

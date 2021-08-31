@@ -31,7 +31,6 @@ controller = {
 function gameLoop() {
     currentTime = (new Date()).getTime();
     delta = (currentTime - lastTime) / 1000;
-    console.log(delta)
     updateData();
     renderData();
     lastTime = currentTime;
@@ -95,6 +94,12 @@ function renderData() {
   context.fillStyle = '#202020'
   context.fillRect(0, 0, context.canvas.width, context.canvas.height)
   player.renderPlayer();
+
+  context.beginPath();
+  context.strokeStyle ="red"
+  context.moveTo(780, 0);
+  context.lineTo(780, 580);
+  context.stroke();
 }
 
 // key Event listener

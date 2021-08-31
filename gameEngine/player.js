@@ -5,7 +5,7 @@ class Player {
     direction = 'right'
     name = 'foobarbaz'
 
-    class = 'dd'
+    class = 'tank'
 
     x = 400;
     y = 550;

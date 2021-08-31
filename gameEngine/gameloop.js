@@ -65,9 +65,9 @@ function updateData() {
 
 
   // bottom wall
-  if (player.y > context.canvas.height - 48) {
+  if (player.y > 600 - 48) {
     player.jumping = false
-    player.y = context.canvas.height - 48
+    player.y = 600 - 48
     player.y_velocity = 0
   }
 
@@ -84,22 +84,16 @@ function updateData() {
   }
 
   // right wall
-  if (player.x >= context.canvas.width - 50) {
-    player.x = context.canvas.width - 50
+  if (player.x >= 800 - 50) {
+    player.x = 800 - 50
     player.x_velocity = 0
   }
 }
 
 function renderData() {
   context.fillStyle = '#202020'
-  context.fillRect(0, 0, context.canvas.width, context.canvas.height)
+  context.fillRect(0, 0, canvas.width, canvas.height)
   player.renderPlayer();
-
-  context.beginPath();
-  context.strokeStyle ="red"
-  context.moveTo(780, 0);
-  context.lineTo(780, 580);
-  context.stroke();
 }
 
 // key Event listener

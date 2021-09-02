@@ -5,7 +5,8 @@ class Player {
     direction = 'right'
     name = 'foobarbaz'
 
-    class = 'tank'
+    playerClass = 'knight' // classes: knight, warrior, archer, mage
+    role = 'tank' // roles: tank, dd, heal
 
     x = 400;
     y = 550;
@@ -13,20 +14,25 @@ class Player {
     sprite = new Image();
     frame = 0;
 
+    id = '';
+
     constructor() {
         this.height = 48,
-            this.width = 48,
-            this.x_velocity = 0,
-            this.y_velocity = 0,
-            this.state = 'idle',
-            this.sprite.src = "./assets/dd/dd_sprite_right.png"
+        this.width = 48,
+        this.x_velocity = 0,
+        this.y_velocity = 0,
+        this.state = 'idle',
+        this.sprite.src = "./assets/dd/dd_sprite_right.png"
+        this.id = uuidv4();
     }
 
     changeState(newState) {
         this.state = newState;
     }
 
-    updatePlayer() {
+    updatePlayerPosition(x, y) {
+        this.x = x;
+        this.y = y;
     }
 
     renderPlayer() {
@@ -42,31 +48,31 @@ class Player {
         const timeNow = Date.now();
         const timeDifference = timeNow - this.frame;
 
-        // check direction and class
-        if(this.class === 'dd') {
+        // check direction and player class
+        if(this.playerClass === 'warrior') {
             if(this.direction === 'right') {
-                this.sprite.src = "./assets/dd/dd_sprite_right.png"
+                this.sprite.src = "./assets/warrior/warrior_sprite_right.png"
             }
             if(this.direction === 'left') { 
-                this.sprite.src = "./assets/dd/dd_sprite_left.png"
+                this.sprite.src = "./assets/warrior/warrior_sprite_left.png"
             }
         }
 
-        if(this.class === 'heal') {
+        if(this.playerClass === 'mage') {
             if(this.direction === 'right') {
-                this.sprite.src = "./assets/heal/heal_sprite_right.png"
+                this.sprite.src = "./assets/mage/mage_sprite_right.png"
             }
             if(this.direction === 'left') { 
-                this.sprite.src = "./assets/heal/heal_sprite_left.png"
+                this.sprite.src = "./assets/mage/mage_sprite_left.png"
             }
         }
 
-        if(this.class === 'tank') {
+        if(this.playerClass === 'knight') {
             if(this.direction === 'right') {
-                this.sprite.src = "./assets/tank/tank_sprite_right.png"
+                this.sprite.src = "./assets/knight/knight_sprite_right.png"
             }
             if(this.direction === 'left') { 
-                this.sprite.src = "./assets/tank/tank_sprite_left.png"
+                this.sprite.src = "./assets/knight/knight_sprite_left.png"
             }
         }
 

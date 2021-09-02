@@ -26,8 +26,6 @@ let desiredScale = Math.min(xScale, yScale);
 canvas.width = canvas.clientWidth * dpr;
 canvas.height = canvas.clientHeight * dpr;
 
-console.log(desiredScale)
-
 // Scale the canvas using our chosen scale
 ctx.setTransform(desiredScale, 0, 0, desiredScale, 0, 0);
 

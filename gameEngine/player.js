@@ -22,7 +22,7 @@ class Player {
         this.x_velocity = 0,
         this.y_velocity = 0,
         this.state = 'idle',
-        this.sprite.src = "./assets/dd/dd_sprite_right.png"
+        this.sprite.src = ''
         this.id = uuidv4();
     }
 

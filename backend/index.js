@@ -27,8 +27,9 @@ wss.on('connection', function connection(ws) {
   
     ws.on('message', function incoming(message) {
         console.log('got a message')
-        console.log(message)
-        ws.send(JSON.stringify(lobbyArray));
+        let msg = JSON.parse(message);
+        console.log(msg)
+        //ws.send(JSON.stringify(lobbyArray));
     });
     
     ws.on('close', function(){

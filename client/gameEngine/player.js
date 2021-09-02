@@ -76,6 +76,15 @@ class Player {
             }
         }
 
+        if(this.playerClass === 'archer') {
+            if(this.direction === 'right') {
+                this.sprite.src = "./assets/archer/archer_sprite_right.png"
+            }
+            if(this.direction === 'left') { 
+                this.sprite.src = "./assets/archer/archer_sprite_left.png"
+            }
+        }
+
         // idle animaiton
         if (this.state === 'idle') {
             if(this.direction === 'right') {

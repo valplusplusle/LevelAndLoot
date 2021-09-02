@@ -2,5 +2,11 @@
   "name": "lvlalServer",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "http": "^0.0.1-security",
+    "ws": "^8.2.1"
+  }
 }

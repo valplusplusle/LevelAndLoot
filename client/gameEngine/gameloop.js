@@ -3,6 +3,7 @@ var player = new Player;
 var lastTime = (new Date()).getTime();
 var currentTime = 0;
 var delta = 0;
+var otherPlayers = [];
 
 controller = {
   left: false,
@@ -94,6 +95,9 @@ function renderData() {
   context.fillStyle = '#202020'
   context.fillRect(0, 0, canvas.width, canvas.height)
   player.renderPlayer();
+  otherPlayers.forEach(otherPlayer => {
+    otherPlayer.renderPlayer();
+  });
 }
 
 // key Event listener

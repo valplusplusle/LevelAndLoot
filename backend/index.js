@@ -22,6 +22,12 @@ var wss = new WebSocketServer({
 // main game connections
 const lobbyArray = [];
 
+wss.broadcast = function broadcast(msg) {
+  wss.clients.forEach(function each(client) {
+      client.send(msg);
+   });
+};
+
 wss.on('connection', function connection(ws) {
   // senc actual lobby on connection opening
   ws.send(JSON.stringify(lobbyArray));
@@ -54,5 +60,10 @@ wss.on('connection', function connection(ws) {
     // connection closed handling
     objIndex = lobbyArray.findIndex((obj => obj.id === ws.id));
     lobbyArray.splice(objIndex, 1);
+    var data = {
+      event: "connectionClosed",
+      id: ws.id
+    }
+    wss.broadcast(JSON.stringify(data));
   })
 });

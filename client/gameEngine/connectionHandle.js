@@ -3,30 +3,36 @@ var webSocket = new WebSocket(socketName);
 
 webSocket.onmessage = (message) => {
     // got all player data
-    var lobbyArray = JSON.parse(message.data);
-    lobbyArray.forEach(lobbyPlayer => {
-        if(lobbyPlayer.id !== player.id) {
-            var indexOfObject = otherPlayers.findIndex((obj => obj.id === lobbyPlayer.id));
-            if (indexOfObject != -1) {
-                otherPlayers[indexOfObject].x = lobbyPlayer.x;
-                otherPlayers[indexOfObject].y = lobbyPlayer.y;
-                otherPlayers[indexOfObject].state = lobbyPlayer.state;
-                otherPlayers[indexOfObject].lastState = lobbyPlayer.lastState;
-                otherPlayers[indexOfObject].direction = lobbyPlayer.direction;
-                otherPlayers[indexOfObject].name = lobbyPlayer.name;
-                otherPlayers[indexOfObject].class = lobbyPlayer.class;
-                otherPlayers[indexOfObject].role = lobbyPlayer.role;
-            } else {
-                let newPlayer = new Player;
-                newPlayer.id = lobbyPlayer.id;
-                otherPlayers.push(newPlayer)
+    var messageData = JSON.parse(message.data);
+    if (messageData.event === "connectionClosed") {
+        var indexOfObject = otherPlayers.findIndex((obj => obj.id === messageData.id));
+        otherPlayers.splice(indexOfObject, 1);
+    } else {
+        var lobbyArray = messageData;
+        lobbyArray.forEach(lobbyPlayer => {
+            if(lobbyPlayer.id !== player.id) {
+                var indexOfObject = otherPlayers.findIndex((obj => obj.id === lobbyPlayer.id));
+                if (indexOfObject != -1) {
+                    otherPlayers[indexOfObject].x = lobbyPlayer.x;
+                    otherPlayers[indexOfObject].y = lobbyPlayer.y;
+                    otherPlayers[indexOfObject].state = lobbyPlayer.state;
+                    otherPlayers[indexOfObject].lastState = lobbyPlayer.lastState;
+                    otherPlayers[indexOfObject].direction = lobbyPlayer.direction;
+                    otherPlayers[indexOfObject].name = lobbyPlayer.name;
+                    otherPlayers[indexOfObject].class = lobbyPlayer.class;
+                    otherPlayers[indexOfObject].role = lobbyPlayer.role;
+                } else {
+                    let newPlayer = new Player;
+                    newPlayer.id = lobbyPlayer.id;
+                    otherPlayers.push(newPlayer)
+                }
             }
-        }
-    });
-    console.log(otherPlayers)
+        });
+    }
+
 };
 
 var intervalId = window.setInterval(function(){
     // send player data every 5 ms
     webSocket.send(JSON.stringify(player));
-}, 5);
+}, 15);

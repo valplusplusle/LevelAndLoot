@@ -35,12 +35,99 @@ body {
 #playerMenu {
     position: absolute;
     right: 0;
-    height: 400px;
+    height: 365px;
     width: 50px;
-    background-color: #ffffff59;
-
+    background-color: #ffffff26;
     top: 0;
     bottom: 0;
     margin-top: auto;
     margin-bottom: auto;
+}
+
+#roleSelection {
+    height: 140px;
+}
+
+#dd {
+    height: 36px;
+    width: 36px;
+    background-image: url(../assets/icons/dd.png);
+    background-size: auto;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: auto;
+    margin-top: 5px;
+    border: 2px solid black;
+}
+
+#tank {
+    height: 36px;
+    width: 36px;
+    background-image: url(../assets/icons/tank.png);
+    background-size: auto;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: auto;
+    margin-top: 5px;
+    border: 2px solid black;
+}
+
+#heal {
+    height: 36px;
+    width: 36px;
+    background-image: url(../assets/icons/heal.png);
+    background-size: auto;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: auto;
+    margin-top: 5px;
+    border: 2px solid black;
+}
+
+#knight {
+    height: 36px;
+    width: 36px;
+    background-image: url(../assets/icons/knight.png);
+    background-size: auto;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: auto;
+    margin-top: 5px;
+    border: 2px solid black;
+}
+
+#mage {
+    height: 36px;
+    width: 36px;
+    background-image: url(../assets/icons/mage.png);
+    background-size: auto;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: auto;
+    margin-top: 5px;
+    border: 2px solid black;
+}
+
+#archer {
+    height: 36px;
+    width: 36px;
+    background-image: url(../assets/icons/archer.png);
+    background-size: auto;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: auto;
+    margin-top: 5px;
+    border: 2px solid black;
+}
+
+#warrior {
+    height: 36px;
+    width: 36px;
+    background-image: url(../assets/icons/warrior.png);
+    background-size: auto;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: auto;
+    margin-top: 5px;
+    border: 2px solid black;
 }

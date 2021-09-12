@@ -27,12 +27,19 @@
         </div>
 
         <div id="playerMenu">
+            <div style="text-align: center; color:white;">ROLE</div>
             <div id="roleSelection">
-
+                <div id="dd"></div>
+                <div id="tank"></div>
+                <div id="heal"></div>
             </div>
     
+            <div style="text-align: center; color:white;">CLASS</div>
             <div id="classSelection">
-    
+                <div id="knight" onclick="changeClass('knight')"></div>
+                <div id="mage" onclick="changeClass('mage')"></div>
+                <div id="archer" onclick="changeClass('archer')"></div>
+                <div id="warrior" onclick="changeClass('warrior')"></div>
             </div>
         </div>
 
@@ -49,4 +56,5 @@
 <script src="./gameEngine/canvas.js"></script>
 <script src="./gameEngine/player.js"></script>
 <script src="./gameEngine/gameloop.js"></script>
+<script src="./gameEngine/changePlayerSettings.js"></script>
 <script src="./gameEngine/connectionHandle.js"></script>

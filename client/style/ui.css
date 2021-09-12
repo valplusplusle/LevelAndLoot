@@ -2,6 +2,36 @@ body {
     overflow: hidden;
 }
 
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #ffffff26; 
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: rgb(177, 176, 176); 
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+  }
+
+.buttonIcon:hover {
+    background-color: black;
+    cursor: pointer;
+}
+
+.buttonIcon:active {
+    background-color: #161616;
+    transform: translateY(4px);
+  }
+
 #skillbar {
     position: absolute;
     bottom: 0;
@@ -132,6 +162,24 @@ body {
     height: 250px;
     width: 400px;
     background-color: #ffffff26;
+}
+
+#chatField {
+    height: 200px;
+    width: 384px;
+    margin: 5px;
+    margin-top: 7px;
+    margin-bottom: 7px;
+    border: 2px solid black;
+    overflow-y: scroll;
+}
+
+#chatinput {
+    height: 25px;
+    width: 388px;
+    margin: 5px;
+    margin-top: 0px;
+    border: 2px solid black;
 }
 
 #playerMenu {

@@ -16,10 +16,10 @@
 <div style="width: 100vw; height: 100vh;">
     <div id="ui" style="position: absolute; height: 100vh; width: 100vw;">
         <div id="skillbar">
-            <div id="skill1">1</div>
-            <div id="skill2">2</div>
-            <div id="skill3">3</div>
-            <div id="skill4">4</div>
+            <div id="skill1" class="buttonIcon">1</div>
+            <div id="skill2" class="buttonIcon">2</div>
+            <div id="skill3" class="buttonIcon">3</div>
+            <div id="skill4" class="buttonIcon">4</div>
         </div>
 
         <div id="charInfo">
@@ -36,22 +36,23 @@
         <div id="playerMenu">
             <div style="text-align: center; color:white;">ROLE</div>
             <div id="roleSelection">
-                <div id="dd" onclick="changeRole('dd')"></div>
-                <div id="tank" onclick="changeRole('tank')"></div>
-                <div id="heal" onclick="changeRole('heal')"></div>
+                <div id="dd" class="buttonIcon" onclick="changeRole('dd')"></div>
+                <div id="tank" class="buttonIcon" onclick="changeRole('tank')"></div>
+                <div id="heal" class="buttonIcon" onclick="changeRole('heal')"></div>
             </div>
     
             <div style="text-align: center; color:white;">CLASS</div>
             <div id="classSelection">
-                <div id="knight" onclick="changeClass('knight')"></div>
-                <div id="mage" onclick="changeClass('mage')"></div>
-                <div id="archer" onclick="changeClass('archer')"></div>
-                <div id="warrior" onclick="changeClass('warrior')"></div>
+                <div id="knight" class="buttonIcon" onclick="changeClass('knight')"></div>
+                <div id="mage" class="buttonIcon" onclick="changeClass('mage')"></div>
+                <div id="archer" class="buttonIcon" onclick="changeClass('archer')"></div>
+                <div id="warrior" class="buttonIcon" onclick="changeClass('warrior')"></div>
             </div>
         </div>
 
         <div id="chat">
-
+            <div id="chatField"></div>
+            <input type="text" id="chatinput"></input>
         </div>
     </div>
     <div style="display: flex; align-items: center; justify-content: center;">

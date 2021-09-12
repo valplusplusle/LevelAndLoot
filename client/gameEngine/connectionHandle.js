@@ -19,7 +19,7 @@ webSocket.onmessage = (message) => {
                     otherPlayers[indexOfObject].lastState = lobbyPlayer.lastState;
                     otherPlayers[indexOfObject].direction = lobbyPlayer.direction;
                     otherPlayers[indexOfObject].name = lobbyPlayer.name;
-                    otherPlayers[indexOfObject].class = lobbyPlayer.class;
+                    otherPlayers[indexOfObject].playerClass = lobbyPlayer.playerClass;
                     otherPlayers[indexOfObject].role = lobbyPlayer.role;
                 } else {
                     let newPlayer = new Player;

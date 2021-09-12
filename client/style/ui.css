@@ -6,12 +6,60 @@ body {
     position: absolute;
     bottom: 0;
     height: 50px;
-    width: 300px;
-    background-color: #ffffff59;
+    width: 200px;
+    background-color: #ffffff26;
     left: 0;
     right: 0;
     margin-left: auto;
     margin-right: auto;
+}
+
+#skill1 {
+    height: 36px;
+    width: 36px;
+    background-image: url(../assets/icons/mage.png);
+    background-size: auto;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 5px;
+    border: 2px solid black;
+    float: left;
+}
+
+#skill2 {
+    height: 36px;
+    width: 36px;
+    background-image: url(../assets/icons/mage.png);
+    background-size: auto;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 5px;
+    border: 2px solid black;
+    float: left;
+}
+
+#skill3 {
+    height: 36px;
+    width: 36px;
+    background-image: url(../assets/icons/mage.png);
+    background-size: auto;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 5px;
+    border: 2px solid black;
+    float: left;
+}
+
+#skill4 {
+    height: 36px;
+    width: 36px;
+    background-image: url(../assets/icons/mage.png);
+    background-size: auto;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 5px;
+    border: 2px solid black;
+    float: left;
 }
 
 #charInfo {
@@ -20,7 +68,7 @@ body {
     top: 0;
     height: 100px;
     width: 250px;
-    background-color: #ffffff59;
+    background-color: #ffffff26;
 }
 
 #chat {
@@ -29,7 +77,7 @@ body {
     bottom: 0;
     height: 250px;
     width: 400px;
-    background-color: #ffffff59;
+    background-color: #ffffff26;
 }
 
 #playerMenu {

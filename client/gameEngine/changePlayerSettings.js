@@ -9,3 +9,7 @@ function changeRole(playerRole) {
         player.role = playerRole;
     }
 }
+
+function changePlayerName() {
+    player.name = document.getElementById('name').value;
+}

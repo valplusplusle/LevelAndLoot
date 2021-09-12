@@ -72,8 +72,8 @@ body {
 }
 
 #name {
-    width: 130px;
-    height: 20px;
+    width: 134px;
+    height: 23px;
     border: 2px solid black;
     margin: 10px;
     float: right;
@@ -89,7 +89,23 @@ body {
     float: right;
 }
 
-#actionbar {
+#healthBar {
+    width: 100%;
+    height: 100%;
+    background-color: red;
+    text-align: center;
+    font-size: 10px;
+}
+
+#actionBar {
+    width: 100%;
+    height: 100%;
+    background-color: blue;
+    text-align: center;
+    font-size: 10px;
+}
+
+#action {
     width: 130px;
     height: 10px;
     border: 2px solid black;
@@ -104,6 +120,9 @@ body {
     border: 2px solid black;
     margin: 10px;
     float: left;
+    background-size: 60px;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 #chat {

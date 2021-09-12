@@ -24,9 +24,13 @@
 
         <div id="charInfo">
             <div id="roleIcon"></div>
-            <div id="name"></div>
-            <div id="health"></div>
-            <div id="actionbar"></div>
+            <input type="text" id="name" onchange="changePlayerName()"></input>
+            <div id="health">
+                <div id="healthBar">100%</div>
+            </div>
+            <div id="action">
+                <div id="actionBar"></div>
+            </div>
         </div>
 
         <div id="playerMenu">
@@ -58,6 +62,7 @@
 <script src="./gameEngine/globalFunctions.js"></script>
 <script src="./gameEngine/canvas.js"></script>
 <script src="./gameEngine/player.js"></script>
+<script src="./gameEngine/renderUi.js"></script>
 <script src="./gameEngine/gameloop.js"></script>
 <script src="./gameEngine/changePlayerSettings.js"></script>
 <script src="./gameEngine/connectionHandle.js"></script>

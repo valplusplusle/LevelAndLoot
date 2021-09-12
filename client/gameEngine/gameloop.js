@@ -5,6 +5,9 @@ var currentTime = 0;
 var delta = 0;
 var otherPlayers = [];
 
+// init player name
+document.getElementById('name').value = player.name;
+
 controller = {
   left: false,
   right: false,
@@ -98,6 +101,7 @@ function renderData() {
   otherPlayers.forEach(otherPlayer => {
     otherPlayer.renderPlayer();
   });
+  renderUI();
 }
 
 // key Event listener

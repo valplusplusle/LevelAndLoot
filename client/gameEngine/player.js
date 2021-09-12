@@ -1,6 +1,7 @@
 class Player {
     state = 'idle';
     lastState = 'idle';
+    inFight = false;
 
     direction = 'right'
     name = 'foobarbaz'

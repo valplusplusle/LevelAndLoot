@@ -12,7 +12,7 @@ class Player {
     role = 'tank' // roles: tank, dd, heal
 
     x = 400;
-    y = 550;
+    y = 250;
 
     sprite = new Image();
     frame = 0;

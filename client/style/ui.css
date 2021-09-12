@@ -66,9 +66,44 @@ body {
     position: absolute;
     left: 0;
     top: 0;
-    height: 100px;
+    height: 95px;
     width: 250px;
     background-color: #ffffff26;
+}
+
+#name {
+    width: 130px;
+    height: 20px;
+    border: 2px solid black;
+    margin: 10px;
+    float: right;
+}
+
+#health {
+    width: 130px;
+    height: 10px;
+    border: 2px solid black;
+    margin: 10px;
+    margin-top: 8px;
+    margin-bottom: 3px;
+    float: right;
+}
+
+#actionbar {
+    width: 130px;
+    height: 10px;
+    border: 2px solid black;
+    margin: 10px;
+    margin-top: 0;
+    float: right;
+}
+
+#roleIcon {
+    height: 70px;
+    width: 70px;
+    border: 2px solid black;
+    margin: 10px;
+    float: left;
 }
 
 #chat {

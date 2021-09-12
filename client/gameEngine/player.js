@@ -6,6 +6,8 @@ class Player {
     direction = 'right'
     name = 'foobarbaz'
 
+    health = 100;
+
     playerClass = 'knight' // classes: knight, warrior, archer, mage
     role = 'tank' // roles: tank, dd, heal
 

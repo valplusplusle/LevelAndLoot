@@ -1,5 +1,6 @@
 function renderUI() {
     renderRole();
+    renderHealth();
 }
 
 function renderRole() {
@@ -12,4 +13,9 @@ function renderRole() {
     if(player.role === 'heal') {
         document.getElementById('roleIcon').style.backgroundImage = "url('./assets/icons/heal.png')";
     }
+}
+
+function renderHealth() {
+    document.getElementById('healthBar').style.width = player.health + '%';
+    document.getElementById('healthText').innerHTML = player.health + '%';
 }

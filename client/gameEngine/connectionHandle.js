@@ -7,6 +7,8 @@ webSocket.onmessage = (message) => {
     if (messageData.event === "connectionClosed") {
         var indexOfObject = otherPlayers.findIndex((obj => obj.id === messageData.id));
         otherPlayers.splice(indexOfObject, 1);
+    } else if (messageData.event === "chatMessage") {
+        writeMessageToBoard(messageData);
     } else {
         var lobbyArray = messageData;
         lobbyArray.forEach(lobbyPlayer => {

@@ -34,26 +34,31 @@ wss.on('connection', function connection(ws) {
 
   ws.on('message', function incoming(message) {
     let msg = JSON.parse(message);
-    ws.id = msg.id;
 
-    if (lobbyArray.length > 0) {
-      const checkLobbyArray = obj => obj.id === msg.id;
+    if (msg.event === "chatMessage") {
+      wss.broadcast(JSON.stringify(msg));
+    } else {
+      ws.id = msg.id;
 
-      // check if player object is already in lobby
-      if (lobbyArray.some(checkLobbyArray)) {
-        // if true, update the object
-        objIndex = lobbyArray.findIndex((obj => obj.id === msg.id));
-        lobbyArray[objIndex] = msg;
+      if (lobbyArray.length > 0) {
+        const checkLobbyArray = obj => obj.id === msg.id;
+
+        // check if player object is already in lobby
+        if (lobbyArray.some(checkLobbyArray)) {
+          // if true, update the object
+          objIndex = lobbyArray.findIndex((obj => obj.id === msg.id));
+          lobbyArray[objIndex] = msg;
+        } else {
+          // else add new player
+          lobbyArray.push(msg);
+        }
       } else {
-        // else add new player
+        // if no player is online add as first player
         lobbyArray.push(msg);
       }
-    } else {
-      // if no player is online add as first player
-      lobbyArray.push(msg);
+      // send lobby as anwser on each update
+      ws.send(JSON.stringify(lobbyArray));
     }
-    // send lobby as anwser on each update
-    ws.send(JSON.stringify(lobbyArray));
   });
 
   ws.on('close', function () {

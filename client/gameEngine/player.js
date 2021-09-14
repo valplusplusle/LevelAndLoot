@@ -142,5 +142,41 @@ class Player {
             }
             if (timeDifference >= 500) { this.frame = Date.now(); }
         }
+
+        // attack 1
+        if (this.state === 'attack1') {
+            if(this.direction === 'right') {
+                if (timeDifference <= 100) {
+                    context.drawImage(this.sprite, 15, 354, 50, 48, this.x, this.y, 50, 48);
+                } else if (timeDifference > 100 && timeDifference <= 200) {
+                    context.drawImage(this.sprite, 115, 354, 50, 48, this.x, this.y, 50, 48);
+                } else if (timeDifference > 200 && timeDifference <= 300) {
+                    context.drawImage(this.sprite, 215, 354, 50, 48, this.x, this.y, 50, 48);
+                } else if (timeDifference > 300 && timeDifference <= 400) {
+                    context.drawImage(this.sprite, 315, 354, 50, 48, this.x, this.y, 50, 48);
+                } else if (timeDifference > 400 && timeDifference <= 500) {
+                    context.drawImage(this.sprite, 415, 354, 50, 48, this.x, this.y, 50, 48);
+                } else if (timeDifference > 500 && timeDifference <= 600) {
+                    context.drawImage(this.sprite, 515, 354, 50, 48, this.x, this.y, 50, 48);
+                }
+                if (timeDifference >= 600) { this.frame = Date.now(); this.changeState('idle');}
+            }
+            if(this.direction === 'left') {
+                if (timeDifference <= 100) {
+                    context.drawImage(this.sprite, 530, 354, 50, 48, this.x, this.y, 50, 48);
+                } else if (timeDifference > 100 && timeDifference <= 200) {
+                    context.drawImage(this.sprite, 430, 354, 50, 48, this.x, this.y, 50, 48);
+                } else if (timeDifference > 200 && timeDifference <= 300) {
+                    context.drawImage(this.sprite, 330, 354, 50, 48, this.x, this.y, 50, 48);
+                } else if (timeDifference > 300 && timeDifference <= 400) {
+                    context.drawImage(this.sprite, 230, 354, 50, 48, this.x, this.y, 50, 48);
+                } else if (timeDifference > 400 && timeDifference <= 500) {
+                    context.drawImage(this.sprite, 130, 354, 50, 48, this.x, this.y, 50, 48);
+                } else if (timeDifference > 500 && timeDifference <= 600) {
+                    context.drawImage(this.sprite, 30, 354, 50, 48, this.x, this.y, 50, 48);
+                }
+                if (timeDifference >= 600) { this.frame = Date.now(); this.changeState('idle');}
+            }
+        }
     }
 }

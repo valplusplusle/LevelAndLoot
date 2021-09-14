@@ -12,6 +12,7 @@ controller = {
   left: false,
   right: false,
   up: false,
+  down: false,
   keyListener: function(event) {
     var key_state = event.type == 'keydown' ? true : false
     if (key_state == false) {player.state = 'idle'}

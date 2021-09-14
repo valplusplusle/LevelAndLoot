@@ -13,22 +13,26 @@ controller = {
   right: false,
   up: false,
   down: false,
+  one: false,
   keyListener: function(event) {
     var key_state = event.type == 'keydown' ? true : false
-    if (key_state == false) {player.state = 'idle'}
-    switch (event.keyCode) {
-      case 87:
-        controller.up = key_state
-        break
-      case 83:
-        controller.down = key_state
-        break
-      case 68:
-        controller.right = key_state
-        break
-      case 65:
-        controller.left = key_state
-        break
+    if (key_state == false && player.state != 'attack1') {player.state = 'idle'}
+    if (document.activeElement.id !== "chatinput" && document.activeElement.id !== "name") {
+      switch (event.keyCode) {
+        case 87:
+          controller.up = key_state
+          break
+        case 83:
+          controller.down = key_state
+          break
+        case 68:
+          controller.right = key_state
+          break
+        case 65:
+          controller.left = key_state
+          break
+  
+      }
     }
   },
 }
@@ -45,20 +49,28 @@ function gameLoop() {
 function updateData() {
   if (controller.up) {
     player.y_velocity -= 200 * delta
-    player.state = 'run';
+    if(player.state != 'attack1') {
+      player.state = 'run';
+    }
   }
   if (controller.down) {
     player.y_velocity += 200 * delta
-    player.state = 'run';
+    if(player.state != 'attack1') {
+      player.state = 'run';
+    }
   }
   if (controller.left) {
     player.x_velocity -= 200 * delta 
-    player.state = 'run';
+    if(player.state != 'attack1') {
+      player.state = 'run';
+    }
     player.direction = 'left';
   }
   if (controller.right) {
     player.x_velocity += 200 * delta
-    player.state = 'run';
+    if(player.state != 'attack1') {
+      player.state = 'run';
+    }
     player.direction = 'right';
   }
 
@@ -108,6 +120,12 @@ function renderData() {
 // key Event listener
 window.addEventListener('keydown', controller.keyListener)
 window.addEventListener('keyup', controller.keyListener)
+
+document.addEventListener('keydown', function (e) {
+  if(e.code == 'Digit1') {
+    document.getElementById("skill1").click();
+  }
+}, false);
 
 
 // start game loop

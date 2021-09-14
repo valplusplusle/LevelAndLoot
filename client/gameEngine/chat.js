@@ -12,12 +12,14 @@ document.addEventListener("keyup", function(event) {
 });
 
 function sendMessage(chatMessage) {
-    chatMessage = {
+    chatMessageObject = {
         event: 'chatMessage',
         from: player.name,
         message: chatMessage
     }
-    webSocket.send(JSON.stringify(chatMessage));
+    if (chatMessage != "") {
+        webSocket.send(JSON.stringify(chatMessageObject));
+    }
 }
 
 function writeMessageToBoard(messageObject) {

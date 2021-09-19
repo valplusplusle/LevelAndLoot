@@ -127,6 +127,5 @@ document.addEventListener('keydown', function (e) {
   }
 }, false);
 
-
 // start game loop
 window.requestAnimationFrame(gameLoop)

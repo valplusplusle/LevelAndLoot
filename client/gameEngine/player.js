@@ -4,7 +4,7 @@ class Player {
     inFight = false;
 
     direction = 'right'
-    name = 'foobarbaz'
+    name = 'unknown-player'
 
     health = 100;
 

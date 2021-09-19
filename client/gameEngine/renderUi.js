@@ -1,6 +1,7 @@
 function renderUI() {
     renderRole();
     renderHealth();
+    renderSkillBar();
 }
 
 function renderRole() {
@@ -18,4 +19,8 @@ function renderRole() {
 function renderHealth() {
     document.getElementById('healthBar').style.width = player.health + '%';
     document.getElementById('healthText').innerHTML = player.health + '%';
+}
+
+function renderSkillBar() {
+    
 }

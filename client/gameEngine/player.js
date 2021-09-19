@@ -3,6 +3,8 @@ class Player {
     lastState = 'idle';
     inFight = false;
 
+    world = "city-1" //Maps where the player could be
+
     direction = 'right'
     name = 'unknown-player'
 

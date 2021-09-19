@@ -109,10 +109,13 @@ function updateData() {
 
 function renderData() {
   context.fillStyle = '#202020'
-  context.fillRect(0, 0, canvas.width, canvas.height)
+  //context.fillRect(0, 0, canvas.width, canvas.height)
+  renderWorld(player.world);
   player.renderPlayer();
   otherPlayers.forEach(otherPlayer => {
-    otherPlayer.renderPlayer();
+    if(otherPlayer.world == player.world) {
+      otherPlayer.renderPlayer();
+    }
   });
   renderUI();
 }

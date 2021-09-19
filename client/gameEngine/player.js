@@ -45,6 +45,12 @@ class Player {
         context.textAlign = "center";
         context.fillText('<'+this.name+'>', this.x+25, this.y);
 
+        // shadow
+        context.fillStyle = "#000000";
+        context.beginPath();
+        context.ellipse(this.x+24.5, this.y+44, 13, 3, 0, 0, Math.PI*2, false);
+        context.fill();
+
         // Init animation timer on state change
         if (this.lastState != this.state) { this.frame = 0; this.lastState = this.state };
         if (this.frame == 0) { this.frame = Date.now(); };

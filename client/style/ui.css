@@ -44,7 +44,7 @@ body {
     bottom: 0;
     height: 50px;
     width: 200px;
-    background-color: #ffffff26;
+    background-color: #00000069;
     left: 0;
     right: 0;
     margin-left: auto;
@@ -105,7 +105,7 @@ body {
     top: 0;
     height: 95px;
     width: 250px;
-    background-color: #ffffff26;
+    background-color: #00000069;
 }
 
 #name {
@@ -178,7 +178,7 @@ body {
     bottom: 0;
     height: 250px;
     width: 400px;
-    background-color: #ffffff26;
+    background-color: #00000069;
 }
 
 #chatField {
@@ -189,6 +189,7 @@ body {
     margin-bottom: 7px;
     border: 2px solid black;
     overflow-y: scroll;
+    color: white;
 }
 
 #chatinput {
@@ -204,7 +205,7 @@ body {
     right: 0;
     height: 365px;
     width: 50px;
-    background-color: #ffffff26;
+    background-color: #00000069;
     top: 0;
     bottom: 0;
     margin-top: auto;

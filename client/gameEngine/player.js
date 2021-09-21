@@ -4,6 +4,9 @@ class Player {
 
     inFight = false;
     lastAttack = Date.now();
+    attackObjects = [];
+    healObjects = [];
+    blockObjects = [];
 
     world = "city-1" //Maps where the player could be
 
@@ -62,10 +65,12 @@ class Player {
         const timeDifference = timeNow - this.frame;
 
         // cooldown
-        var cooldownNow = (Date.now() - this.lastAttack)
-        if (cooldownNow < 2000) {
-            cooldownNow = cooldownNow/20;
-            document.getElementById('actionBar').style.width = cooldownNow + '%'
+        if(player.id == this.id) {
+            var cooldownNow = (Date.now() - this.lastAttack)
+            if (cooldownNow < 2000) {
+                cooldownNow = cooldownNow/20;
+                document.getElementById('actionBar').style.width = cooldownNow + '%'
+            }
         }
 
         // check direction and player class
@@ -195,12 +200,36 @@ class Player {
                 if (timeDifference >= 600) { this.frame = Date.now(); this.changeState('idle');}
             }
         }
+
+        // damage field indicator for development
+        if (this.attackObjects.length > 0) {
+            this.attackObjects.forEach((attack, index) => {
+                if((Date.now() - attack.attackTimestamp) <= attack.attackDuration) {
+                    context.beginPath();
+                    context.lineWidth = "6";
+                    context.strokeStyle = "red";
+                    context.rect(attack.damagePlayerX-25, attack.damagePlayerY-25, attack.damageFieldSize, attack.damageFieldSize);
+                    context.stroke();
+                } else {
+                    this.attackObjects.splice(index, 1);
+                }
+            });
+        }
     }
     
     attackSkill1() {
         if ((Date.now() - this.lastAttack) >= 2000) {
             this.lastAttack = Date.now();
             this.changeState('attack1');
+            var attackObject = {
+                attackName: 'knight1',
+                attackTimestamp: this.lastAttack,
+                attackDuration: 1000,
+                damagePlayerX: player.x,
+                damagePlayerY: player.y,
+                damageFieldSize: 100
+            }
+            this.attackObjects.push(attackObject);
         }
     }
 }

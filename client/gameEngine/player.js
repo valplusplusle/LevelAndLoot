@@ -1,7 +1,9 @@
 class Player {
     state = 'idle';
     lastState = 'idle';
+
     inFight = false;
+    lastAttack = Date.now();
 
     world = "city-1" //Maps where the player could be
 
@@ -58,6 +60,13 @@ class Player {
         if (this.frame == 0) { this.frame = Date.now(); };
         const timeNow = Date.now();
         const timeDifference = timeNow - this.frame;
+
+        // cooldown
+        var cooldownNow = (Date.now() - this.lastAttack)
+        if (cooldownNow < 2000) {
+            cooldownNow = cooldownNow/20;
+            document.getElementById('actionBar').style.width = cooldownNow + '%'
+        }
 
         // check direction and player class
         if(this.playerClass === 'warrior') {
@@ -185,6 +194,13 @@ class Player {
                 }
                 if (timeDifference >= 600) { this.frame = Date.now(); this.changeState('idle');}
             }
+        }
+    }
+    
+    attackSkill1() {
+        if ((Date.now() - this.lastAttack) >= 2000) {
+            this.lastAttack = Date.now();
+            this.changeState('attack1');
         }
     }
 }

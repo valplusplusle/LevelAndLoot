@@ -218,18 +218,38 @@ class Player {
     }
     
     attackSkill1() {
-        if ((Date.now() - this.lastAttack) >= 2000) {
-            this.lastAttack = Date.now();
-            this.changeState('attack1');
-            var attackObject = {
-                attackName: 'knight1',
-                attackTimestamp: this.lastAttack,
-                attackDuration: 1000,
-                damagePlayerX: player.x,
-                damagePlayerY: player.y,
-                damageFieldSize: 100
+        if(this.playerClass == 'knight') {
+            if ((Date.now() - this.lastAttack) >= 2000) {
+                this.lastAttack = Date.now();
+                this.changeState('attack1');
+                var attackObject = {
+                    attackName: 'knight1',
+                    attackTimestamp: this.lastAttack,
+                    attackDuration: 1000,
+                    damagePlayerX: player.x,
+                    damagePlayerY: player.y,
+                    damageFieldSize: 100,
+                    damage: 10
+                }
+                this.attackObjects.push(attackObject);
             }
-            this.attackObjects.push(attackObject);
         }
+        if (this.playerClass == 'archer') {
+            if ((Date.now() - this.lastAttack) >= 2000) {
+                this.lastAttack = Date.now();
+                this.changeState('attack1');
+                var attackObject = {
+                    attackName: 'knight1',
+                    attackTimestamp: this.lastAttack,
+                    attackDuration: 1000,
+                    damagePlayerX: player.x,
+                    damagePlayerY: player.y,
+                    damageFieldSize: 100,
+                    damage: 10
+                }
+                this.attackObjects.push(attackObject);
+            }
+        }
+
     }
 }

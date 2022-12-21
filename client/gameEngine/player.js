@@ -250,6 +250,22 @@ class Player {
                 this.attackObjects.push(attackObject);
             }
         }
+        if (this.playerClass == 'mage') {
+            if ((Date.now() - this.lastAttack) >= 2000) {
+                this.lastAttack = Date.now();
+                this.changeState('attack1');
+                var attackObject = {
+                    attackName: 'mage1',
+                    attackTimestamp: this.lastAttack,
+                    attackDuration: 1000,
+                    damagePlayerX: player.x,
+                    damagePlayerY: player.y,
+                    damageFieldSize: 100,
+                    damage: 10
+                }
+                this.attackObjects.push(attackObject);
+            }
+        }
 
     }
 }

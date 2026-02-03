@@ -28,11 +28,11 @@ class Player {
 
     constructor() {
         this.height = 48,
-        this.width = 48,
-        this.x_velocity = 0,
-        this.y_velocity = 0,
-        this.state = 'idle',
-        this.sprite.src = ''
+            this.width = 48,
+            this.x_velocity = 0,
+            this.y_velocity = 0,
+            this.state = 'idle',
+            this.sprite.src = ''
         this.id = uuidv4();
     }
 
@@ -50,12 +50,12 @@ class Player {
         context.font = "10px Arial";
         context.fillStyle = "white";
         context.textAlign = "center";
-        context.fillText('<'+this.name+'>', this.x+25, this.y);
+        context.fillText('<' + this.name + '>', this.x + 25, this.y);
 
         // shadow
         context.fillStyle = "#000000";
         context.beginPath();
-        context.ellipse(this.x+24.5, this.y+44, 13, 3, 0, 0, Math.PI*2, false);
+        context.ellipse(this.x + 24.5, this.y + 44, 13, 3, 0, 0, Math.PI * 2, false);
         context.fill();
 
         // Init animation timer on state change
@@ -65,54 +65,54 @@ class Player {
         const timeDifference = timeNow - this.frame;
 
         // cooldown
-        if(player.id == this.id) {
+        if (player.id == this.id) {
             var cooldownNow = (Date.now() - this.lastAttack)
             if (cooldownNow < 2000) {
-                cooldownNow = cooldownNow/20;
+                cooldownNow = cooldownNow / 20;
                 document.getElementById('actionBar').style.width = cooldownNow + '%'
             }
         }
 
         // check direction and player class
-        if(this.playerClass === 'warrior') {
-            if(this.direction === 'right') {
+        if (this.playerClass === 'warrior') {
+            if (this.direction === 'right') {
                 this.sprite.src = "./assets/warrior/warrior_sprite_right.png"
             }
-            if(this.direction === 'left') { 
+            if (this.direction === 'left') {
                 this.sprite.src = "./assets/warrior/warrior_sprite_left.png"
             }
         }
 
-        if(this.playerClass === 'mage') {
-            if(this.direction === 'right') {
+        if (this.playerClass === 'mage') {
+            if (this.direction === 'right') {
                 this.sprite.src = "./assets/mage/mage_sprite_right.png"
             }
-            if(this.direction === 'left') { 
+            if (this.direction === 'left') {
                 this.sprite.src = "./assets/mage/mage_sprite_left.png"
             }
         }
 
-        if(this.playerClass === 'knight') {
-            if(this.direction === 'right') {
+        if (this.playerClass === 'knight') {
+            if (this.direction === 'right') {
                 this.sprite.src = "./assets/knight/knight_sprite_right.png"
             }
-            if(this.direction === 'left') { 
+            if (this.direction === 'left') {
                 this.sprite.src = "./assets/knight/knight_sprite_left.png"
             }
         }
 
-        if(this.playerClass === 'archer') {
-            if(this.direction === 'right') {
+        if (this.playerClass === 'archer') {
+            if (this.direction === 'right') {
                 this.sprite.src = "./assets/archer/archer_sprite_right.png"
             }
-            if(this.direction === 'left') { 
+            if (this.direction === 'left') {
                 this.sprite.src = "./assets/archer/archer_sprite_left.png"
             }
         }
 
         // idle animaiton
         if (this.state === 'idle') {
-            if(this.direction === 'right') {
+            if (this.direction === 'right') {
                 if (timeDifference <= 200) {
                     context.drawImage(this.sprite, 0, 0, 50, 48, this.x, this.y, 50, 48);
                 } else if (timeDifference > 200) {
@@ -120,7 +120,7 @@ class Player {
                 }
                 if (timeDifference >= 600) { this.frame = Date.now(); }
             }
-            if(this.direction === 'left') {
+            if (this.direction === 'left') {
                 if (timeDifference <= 200) {
                     context.drawImage(this.sprite, 500, 0, 50, 48, this.x, this.y, 50, 48);
                 } else if (timeDifference > 200) {
@@ -132,7 +132,7 @@ class Player {
 
         // run animation
         if (this.state === 'run') {
-            if(this.direction === 'right') {
+            if (this.direction === 'right') {
                 if (timeDifference <= 100) {
                     context.drawImage(this.sprite, 0, 144, 50, 48, this.x, this.y, 50, 48);
                 } else if (timeDifference > 100 && timeDifference <= 200) {
@@ -147,7 +147,7 @@ class Player {
                     context.drawImage(this.sprite, 250, 144, 50, 48, this.x, this.y, 50, 48);
                 }
             }
-            if(this.direction === 'left') {
+            if (this.direction === 'left') {
                 if (timeDifference <= 100) {
                     context.drawImage(this.sprite, 300, 144, 50, 48, this.x, this.y, 50, 48);
                 } else if (timeDifference > 100 && timeDifference <= 200) {
@@ -167,7 +167,7 @@ class Player {
 
         // attack 1
         if (this.state === 'attack1') {
-            if(this.direction === 'right') {
+            if (this.direction === 'right') {
                 if (timeDifference <= 100) {
                     context.drawImage(this.sprite, 15, 354, 50, 48, this.x, this.y, 50, 48);
                 } else if (timeDifference > 100 && timeDifference <= 200) {
@@ -181,9 +181,9 @@ class Player {
                 } else if (timeDifference > 500 && timeDifference <= 600) {
                     context.drawImage(this.sprite, 515, 354, 50, 48, this.x, this.y, 50, 48);
                 }
-                if (timeDifference >= 600) { this.frame = Date.now(); this.changeState('idle');}
+                if (timeDifference >= 600) { this.frame = Date.now(); this.changeState('idle'); }
             }
-            if(this.direction === 'left') {
+            if (this.direction === 'left') {
                 if (timeDifference <= 100) {
                     context.drawImage(this.sprite, 530, 354, 50, 48, this.x, this.y, 50, 48);
                 } else if (timeDifference > 100 && timeDifference <= 200) {
@@ -197,18 +197,18 @@ class Player {
                 } else if (timeDifference > 500 && timeDifference <= 600) {
                     context.drawImage(this.sprite, 30, 354, 50, 48, this.x, this.y, 50, 48);
                 }
-                if (timeDifference >= 600) { this.frame = Date.now(); this.changeState('idle');}
+                if (timeDifference >= 600) { this.frame = Date.now(); this.changeState('idle'); }
             }
         }
 
         // damage field indicator for development
         if (this.attackObjects.length > 0) {
             this.attackObjects.forEach((attack, index) => {
-                if((Date.now() - attack.attackTimestamp) <= attack.attackDuration) {
+                if ((Date.now() - attack.attackTimestamp) <= attack.attackDuration) {
                     context.beginPath();
                     context.lineWidth = "6";
                     context.strokeStyle = "red";
-                    context.rect(attack.damagePlayerX-25, attack.damagePlayerY-25, attack.damageFieldSize, attack.damageFieldSize);
+                    context.rect(attack.damagePlayerX - 25, attack.damagePlayerY - 25, attack.damageFieldSize, attack.damageFieldSize);
                     context.stroke();
                 } else {
                     this.attackObjects.splice(index, 1);
@@ -216,9 +216,9 @@ class Player {
             });
         }
     }
-    
+
     attackSkill1() {
-        if(this.playerClass == 'knight') {
+        if (this.playerClass == 'knight') {
             if ((Date.now() - this.lastAttack) >= 2000) {
                 this.lastAttack = Date.now();
                 this.changeState('attack1');
@@ -232,6 +232,7 @@ class Player {
                     damage: 10
                 }
                 this.attackObjects.push(attackObject);
+                webSocket.send(JSON.stringify({ event: "skillCast", skill: "skill1" }));
             }
         }
         if (this.playerClass == 'archer') {
@@ -248,6 +249,7 @@ class Player {
                     damage: 10
                 }
                 this.attackObjects.push(attackObject);
+                webSocket.send(JSON.stringify({ event: "skillCast", skill: "skill1" }));
             }
         }
         if (this.playerClass == 'mage') {
@@ -264,7 +266,18 @@ class Player {
                     damage: 10
                 }
                 this.attackObjects.push(attackObject);
+                webSocket.send(JSON.stringify({ event: "skillCast", skill: "skill1" }));
             }
+        }
+
+    }
+
+    attackSkill2() {
+        // healer utility
+        if ((Date.now() - this.lastAttack) >= 2000) {
+            this.lastAttack = Date.now();
+            this.changeState('attack1');
+            webSocket.send(JSON.stringify({ event: "skillCast", skill: "skill2" }));
         }
 
     }

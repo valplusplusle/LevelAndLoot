@@ -1,39 +1,267 @@
 <link rel="stylesheet" type="text/css" href="./style/ui.css">
 <style>
-    canvas {          
+    canvas {
         image-rendering: -moz-crisp-edges;
         image-rendering: -webkit-crisp-edges;
         image-rendering: pixelated;
-        image-rendering: crisp-edges;    
-        height: 100vh;                                       
+        image-rendering: crisp-edges;
+        height: 100vh;
     }
+
     body {
         margin: 0;
         background-color: #202020;
         background-image: url(./assets/backgroundBricks.png);
     }
+    
+    #raidUI {
+        display: none !important;
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 420px;
+        background: linear-gradient(180deg, rgba(20,20,30,0.95) 0%, rgba(10,10,20,0.95) 100%);
+        border: 2px solid rgba(200,180,100,0.6);
+        border-radius: 8px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.8), inset 0 0 10px rgba(200,180,100,0.1);
+        color: #e0d5b7;
+        z-index: 9999 !important;
+        font-family: Arial, sans-serif;
+        cursor: default;
+        pointer-events: auto;
+    }
+    
+    #raidUI.visible {
+        display: block !important;
+    }
+    
+    /* Allow canvas to receive clicks when UI is not visible */
+    #ui {
+        pointer-events: none;
+    }
+    
+    /* Re-enable pointer events for interactive elements */
+    #skillbar, #charInfo, #playerMenu, #chat {
+        pointer-events: auto;
+    }
+    
+    #raidUI * {
+        pointer-events: auto;
+    }
+    
+    #raidUIHeader {
+        background: linear-gradient(180deg, rgba(200,180,100,0.3) 0%, rgba(200,180,100,0.1) 100%);
+        padding: 12px 16px;
+        border-bottom: 1px solid rgba(200,180,100,0.4);
+        font-weight: 700;
+        font-size: 16px;
+        cursor: move;
+        user-select: none;
+        text-align: center;
+        text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    #raidUIClose {
+        background: rgba(200,50,50,0.3);
+        border: 1px solid rgba(200,100,100,0.5);
+        color: #ff9999;
+        padding: 4px 10px;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: bold;
+        border-radius: 3px;
+        transition: all 0.2s;
+    }
+    
+    #raidUIClose:hover {
+        background: rgba(200,50,50,0.6);
+        box-shadow: 0 0 10px rgba(200,50,50,0.4);
+    }
+    
+    #raidList {
+        max-height: 300px;
+        overflow-y: auto;
+        padding: 8px 0;
+        margin: 0;
+    }
+    
+    #raidList::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    #raidList::-webkit-scrollbar-track {
+        background: rgba(0,0,0,0.3);
+    }
+    
+    #raidList::-webkit-scrollbar-thumb {
+        background: rgba(200,180,100,0.4);
+        border-radius: 4px;
+    }
+    
+    #raidList::-webkit-scrollbar-thumb:hover {
+        background: rgba(200,180,100,0.6);
+    }
+    
+    .raidListEntry {
+        padding: 10px 16px;
+        border-bottom: 1px solid rgba(200,180,100,0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.2s;
+    }
+    
+    .raidListEntry:hover {
+        background: rgba(200,180,100,0.1);
+    }
+    
+    .raidListEntry:last-child {
+        border-bottom: none;
+    }
+    
+    .raidListText {
+        flex: 1;
+        font-size: 12px;
+        color: #d0c0a0;
+    }
+    
+    .raidListBtn {
+        background: linear-gradient(180deg, rgba(100,150,200,0.4) 0%, rgba(80,120,180,0.3) 100%);
+        border: 1px solid rgba(100,150,200,0.5);
+        color: #a0d0ff;
+        padding: 5px 12px;
+        margin-left: 8px;
+        cursor: pointer;
+        font-size: 11px;
+        font-weight: bold;
+        border-radius: 3px;
+        transition: all 0.2s;
+    }
+    
+    .raidListBtn:hover {
+        background: linear-gradient(180deg, rgba(120,170,220,0.6) 0%, rgba(100,150,200,0.5) 100%);
+        box-shadow: 0 0 8px rgba(100,150,200,0.4);
+    }
+    
+    #raidUIFooter {
+        padding: 12px 16px;
+        border-top: 1px solid rgba(200,180,100,0.2);
+        display: flex;
+        gap: 8px;
+        justify-content: space-between;
+        background: rgba(0,0,0,0.2);
+    }
+    
+    .raidUIButton {
+        flex: 1;
+        background: linear-gradient(180deg, rgba(100,150,200,0.4) 0%, rgba(80,120,180,0.3) 100%);
+        border: 1px solid rgba(100,150,200,0.5);
+        color: #a0d0ff;
+        padding: 8px 12px;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: bold;
+        border-radius: 3px;
+        transition: all 0.2s;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+    }
+    
+    .raidUIButton:hover {
+        background: linear-gradient(180deg, rgba(120,170,220,0.6) 0%, rgba(100,150,200,0.5) 100%);
+        box-shadow: 0 0 10px rgba(100,150,200,0.4);
+    }
+    
+    #createRaidBtn {
+        background: linear-gradient(180deg, rgba(100,180,100,0.4) 0%, rgba(80,150,80,0.3) 100%);
+        border-color: rgba(100,180,100,0.5);
+        color: #a0ffa0;
+    }
+    
+    #createRaidBtn:hover {
+        background: linear-gradient(180deg, rgba(120,200,120,0.6) 0%, rgba(100,170,100,0.5) 100%);
+        box-shadow: 0 0 10px rgba(100,180,100,0.4);
+    }
+    
+    #closeRaidBtn {
+        background: linear-gradient(180deg, rgba(200,80,80,0.4) 0%, rgba(180,60,60,0.3) 100%);
+        border-color: rgba(200,80,80,0.5);
+        color: #ff9999;
+    }
+    
+    #closeRaidBtn:hover {
+        background: linear-gradient(180deg, rgba(220,100,100,0.6) 0%, rgba(200,80,80,0.5) 100%);
+        box-shadow: 0 0 10px rgba(200,80,80,0.4);
+    }
+    
+    .raidNoEntries {
+        padding: 20px 16px;
+        text-align: center;
+        color: #a0a0a0;
+        font-style: italic;
+        font-size: 12px;
+    }
 </style>
 
 <div style="width: 100vw; height: 100vh;">
-    <div id="ui" style="position: absolute; height: 100vh; width: 100vw;">
+    <div id="ui" class="fullscreen-ui" style="position: fixed; height: 100vh; width: 100vw; z-index: 10002; pointer-events: none;">
+        <!-- Mobile Fullscreen & Chat Toggle -->
+        <button id="fullscreenBtn" style="position:fixed; top:14px; right:14px; z-index:10001; font-size:1.5em; background:#23272e; color:#fff; border-radius:10px; border:none; padding:8px 16px; box-shadow:0 2px 12px #000a; pointer-events:auto;">⛶</button>
+        <button id="chatToggleBtn" style="position:fixed; left:18px; bottom:260px; z-index:10001; font-size:1.5em; background:#23272e; color:#fff; border-radius:10px; border:none; padding:8px 16px; box-shadow:0 2px 12px #000a; pointer-events:auto;">💬</button>
+
+        <!-- Mobile Joystick -->
+        <div id="joystickContainer" style="position:fixed; left:18px; bottom:18px; z-index:10000; width:110px; height:110px; touch-action:none; pointer-events:auto;">
+            <div id="joystickBase" style="position:absolute; left:0; top:0; width:110px; height:110px; background:rgba(60,60,60,0.25); border-radius:50%;"></div>
+            <div id="joystickStick" style="position:absolute; left:35px; top:35px; width:40px; height:40px; background:rgba(200,200,200,0.7); border-radius:50%; box-shadow:0 2px 8px #000a;"></div>
+        </div>
+
+        <!-- Mobile Skill Buttons -->
+        <div id="mobileSkills" style="position:fixed; right:18px; bottom:18px; z-index:10000; display:flex; flex-direction:column; gap:18px; align-items:flex-end;">
+            <button class="mobileSkillBtn" data-skill="1">1</button>
+            <button class="mobileSkillBtn" data-skill="2">2</button>
+            <button class="mobileSkillBtn" data-skill="3">3</button>
+            <button class="mobileSkillBtn" data-skill="4">4</button>
+        </div>
         <div id="skillbar">
-            <div id="skill1" class="buttonIcon" onclick="player.attackSkill1()">1</div>
-            <div id="skill2" class="buttonIcon" onclick="player.attackSkill2()">2</div>
-            <div id="skill3" class="buttonIcon">3</div>
-            <div id="skill4" class="buttonIcon">4</div>
+            <div id="skill1" class="buttonIcon" onclick="player.castSkill(1)">
+                <div class="skillIcon"></div>
+                <div class="skillTooltip"></div>
+                <div class="skillKey">1</div>
+            </div>
+            <div id="skill2" class="buttonIcon" onclick="player.castSkill(2)">
+                <div class="skillIcon"></div>
+                <div class="skillTooltip"></div>
+                <div class="skillKey">2</div>
+            </div>
+            <div id="skill3" class="buttonIcon" onclick="player.castSkill(3)">
+                <div class="skillIcon"></div>
+                <div class="skillTooltip"></div>
+                <div class="skillKey">3</div>
+            </div>
+            <div id="skill4" class="buttonIcon" onclick="player.castSkill(4)">
+                <div class="skillIcon"></div>
+                <div class="skillTooltip"></div>
+                <div class="skillKey">4</div>
+            </div>
         </div>
 
         <div id="charInfo">
-            <div id="roleIcon"></div>
-            <input type="text" id="name" onchange="changePlayerName()"></input>
-            <div id="health">
-                <div id="healthText">100%</div>
-                <div id="healthBar"></div>
+            <div id="roleIcon" style="margin-bottom:8px;"></div>
+            <input type="text" id="name" onchange="changePlayerName()" style="margin-bottom:8px; width:110px; text-align:center;">
+            <div id="health" style="margin-bottom:6px;">
+                <div id="healthText" style="font-size:1em; margin-bottom:2px;">100%</div>
+                <div id="healthBar" style="height:18px; border-radius:6px;"></div>
             </div>
             <div id="action">
-                <div id="actionBar"></div>
+                <div id="actionBar" style="height:14px; border-radius:6px;"></div>
             </div>
+            <div id="raidMembers" style="display:none;"></div>
         </div>
+
+        <div id="duelInfo"></div>
 
         <div id="playerMenu">
             <div style="text-align: center; color:white;">ROLE</div>
@@ -42,7 +270,7 @@
                 <div id="tank" class="buttonIcon" onclick="changeRole('tank')"></div>
                 <div id="heal" class="buttonIcon" onclick="changeRole('heal')"></div>
             </div>
-    
+
             <div style="text-align: center; color:white;">CLASS</div>
             <div id="classSelection">
                 <div id="knight" class="buttonIcon" onclick="changeClass('knight')"></div>
@@ -56,6 +284,20 @@
             <div id="chatField"></div>
             <input type="text" id="chatinput"></input>
         </div>
+
+        <div id="raidUI">
+            <div id="raidUIHeader">
+                <span>⚔️ RAID BOARD</span>
+                <button id="raidUIClose">✕</button>
+            </div>
+            <div id="raidStats" style="margin: 10px 0 10px 0; display:none;"></div>
+            <div id="raidList" style="margin: 0;"></div>
+            <div id="raidUIFooter">
+                <button id="startRaidBtn" class="raidUIButton" style="display:none; background: linear-gradient(180deg, rgba(255,100,0,0.5) 0%, rgba(200,80,0,0.4) 100%); border-color: rgba(255,150,0,0.6); color: #ffcc66;">⚡ Raid Starten</button>
+                <button id="createRaidBtn" class="raidUIButton">+ Neuer Raid</button>
+                <button id="closeRaidBtn" class="raidUIButton">Schließen</button>
+            </div>
+        </div>
     </div>
     <div style="display: flex; align-items: center; justify-content: center;">
         <canvas id="screen"></canvas>
@@ -64,10 +306,12 @@
 
 <script src="./gameEngine/globalFunctions.js"></script>
 <script src="./gameEngine/canvas.js"></script>
+<script src="./gameEngine/combatFx.js"></script> <!-- NEW -->
 <script src="./gameEngine/player.js"></script>
 <script src="./gameEngine/renderUi.js"></script>
 <script src="./gameEngine/renderWorld.js"></script>
 <script src="./gameEngine/gameloop.js"></script>
 <script src="./gameEngine/changePlayerSettings.js"></script>
 <script src="./gameEngine/connectionHandle.js"></script>
+<script src="./gameEngine/raidLobby.js"></script>
 <script src="./gameEngine/chat.js"></script>

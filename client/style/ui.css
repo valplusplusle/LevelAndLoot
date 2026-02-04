@@ -1,3 +1,165 @@
+/* Draggable Raid Group Box */
+#raidGroupBox {
+    min-width: 260px;
+    background: linear-gradient(180deg,rgba(30,20,20,0.97),rgba(10,10,10,0.97));
+    border: 2px solid #a44;
+    border-radius: 8px;
+    box-shadow: 0 4px 18px #000a;
+    color: #ffe;
+    font-family: Arial,sans-serif;
+    font-size: 14px;
+    pointer-events: auto;
+    user-select: none;
+    max-height: 340px;
+    overflow-y: auto;
+    position: fixed;
+    z-index: 10010;
+}
+#raidGroupBoxHeader {
+    background: linear-gradient(180deg,rgba(200,80,80,0.18),rgba(200,80,80,0.08));
+    padding: 10px 16px;
+    border-bottom: 1px solid #a44a;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: move;
+    user-select: none;
+    border-radius: 8px 8px 0 0;
+    letter-spacing: 1px;
+}
+.raidGroupMember {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+    padding: 2px 10px 2px 10px;
+}
+.raidGroupMember span {
+    color: #ffe;
+    font-size: 13px;
+    font-weight: 500;
+}
+/* Skill fail feedback: shake and red flash */
+.skill-fail {
+        animation: skillFailShake 0.18s cubic-bezier(.36,.07,.19,.97) both;
+        box-shadow: 0 0 0 3px #e44, 0 2px 12px #a004;
+        background: linear-gradient(180deg, #a33 0%, #611 100%) !important;
+}
+@keyframes skillFailShake {
+    10%, 90% { transform: translateX(-2px); }
+    20%, 80% { transform: translateX(4px); }
+    30%, 50%, 70% { transform: translateX(-6px); }
+    40%, 60% { transform: translateX(6px); }
+    100% { transform: none; }
+}
+#skillbar .cooldownOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(40,40,40,0.65);
+    border-radius: 50%;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.1em;
+    font-weight: bold;
+    pointer-events: none;
+    transition: opacity 0.2s;
+}
+#skillbar .buttonIcon.cooldown {
+    filter: grayscale(0.8) brightness(0.7);
+    opacity: 0.7;
+}
+#fullscreenBtn {
+    display: none !important;
+}
+/* Ensure UI is always visible in fullscreen */
+.fullscreen-ui {
+    z-index: 10002 !important;
+    pointer-events: none !important;
+}
+.fullscreen-ui > * {
+    pointer-events: auto !important;
+}
+body.fullscreen #ui {
+    z-index: 10002 !important;
+    pointer-events: none !important;
+}
+body.fullscreen #ui > * {
+    pointer-events: auto !important;
+}
+#skillbar .skillKey {
+    position: absolute;
+    bottom: 4px;
+    right: 6px;
+    font-size: 13px;
+    color: #ffe;
+    opacity: 0.7;
+    font-family: Arial, sans-serif;
+    pointer-events: none;
+    text-shadow: 1px 1px 3px #000, 0 0 6px #000;
+    font-weight: bold;
+    z-index: 2;
+}
+/* --- Mobile Controls --- */
+@media (max-width: 900px) and (orientation: landscape) {
+    #joystickContainer { display: block !important; pointer-events: auto !important; }
+    #mobileSkills { display: none !important; }
+    #fullscreenBtn { display: block !important; }
+    #chat { display: none !important; }
+    #skillbar {
+        position: fixed !important;
+        right: 18px !important;
+        bottom: 18px !important;
+        left: auto !important;
+        margin: 0 !important;
+        width: 280px !important;
+        height: 70px !important;
+        flex-direction: row !important;
+        justify-content: flex-end !important;
+        background: linear-gradient(180deg, rgba(30,25,15,0.85) 0%, rgba(15,10,5,0.85) 100%);
+        z-index: 10001;
+        box-shadow: 0 2px 12px #000a;
+        border-radius: 12px;
+        gap: 10px !important;
+        padding: 8px 8px 8px 8px !important;
+    }
+    #skill1, #skill2, #skill3, #skill4 {
+        width: 60px !important;
+        height: 60px !important;
+        border-radius: 50% !important;
+        margin: 0 !important;
+        font-size: 1.5em !important;
+        box-shadow: 0 2px 12px #000a;
+    }
+}
+
+#chatToggleBtn {
+    display: block !important;
+    pointer-events: auto !important;
+}
+
+.mobileSkillBtn {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, #444 0%, #222 100%);
+    color: #fff;
+    font-size: 1.6em;
+    font-weight: bold;
+    border: 2px solid #888;
+    box-shadow: 0 2px 12px #000a;
+    margin-bottom: 0;
+    outline: none;
+    transition: background 0.2s, box-shadow 0.2s;
+}
+.mobileSkillBtn:active {
+    background: #666;
+    box-shadow: 0 0 0 #0000;
+}
 body {
     overflow: hidden;
     cursor:url('../assets/icons/mouse.png'), auto;
@@ -41,261 +203,491 @@ body {
 
 #skillbar {
     position: absolute;
-    bottom: 0;
-    height: 50px;
-    width: 200px;
-    background-color: #00000069;
+    bottom: 20px;
+    height: 70px;
+    width: 280px;
+    background: linear-gradient(180deg, rgba(30,25,15,0.85) 0%, rgba(15,10,5,0.85) 100%);
+    border: 2px solid rgba(200,180,100,0.5);
+    border-radius: 8px;
     left: 0;
     right: 0;
     margin-left: auto;
     margin-right: auto;
+    box-shadow: 0 0 20px rgba(0,0,0,0.8), inset 0 0 10px rgba(200,180,100,0.1);
+    padding: 8px;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    justify-content: center;
 }
 
-#skill1 {
-    height: 36px;
-    width: 36px;
-    background-image: url(../assets/icons/mage.png);
-    background-size: auto;
-    background-repeat: no-repeat;
-    background-position: center;
-    margin: 5px;
-    border: 2px solid black;
-    float: left;
+#skill1, #skill2, #skill3, #skill4 {
+    height: 50px;
+    width: 50px;
+    border: 2px solid rgba(200,180,100,0.6);
+    border-radius: 4px;
+    background-color: rgba(100,80,40,0.5);
+    transition: all 0.2s;
+    box-shadow: 0 0 8px rgba(0,0,0,0.5), inset 0 0 5px rgba(200,180,100,0.1);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
 }
 
-#skill2 {
-    height: 36px;
-    width: 36px;
-    background-image: url(../assets/icons/mage.png);
-    background-size: auto;
+.skillIcon {
+    width: 100%;
+    height: 100%;
+    background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    margin: 5px;
-    border: 2px solid black;
-    float: left;
+    border-radius: 2px;
 }
 
-#skill3 {
-    height: 36px;
-    width: 36px;
-    background-image: url(../assets/icons/mage.png);
-    background-size: auto;
-    background-repeat: no-repeat;
-    background-position: center;
-    margin: 5px;
-    border: 2px solid black;
-    float: left;
+.skillTooltip {
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(10, 10, 10, 0.95);
+    color: #e0d5b7;
+    padding: 8px 12px;
+    border: 1px solid rgba(200,180,100,0.7);
+    border-radius: 4px;
+    white-space: nowrap;
+    font-size: 12px;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+    box-shadow: 0 0 10px rgba(0,0,0,0.8);
 }
 
-#skill4 {
-    height: 36px;
-    width: 36px;
-    background-image: url(../assets/icons/mage.png);
-    background-size: auto;
-    background-repeat: no-repeat;
-    background-position: center;
-    margin: 5px;
-    border: 2px solid black;
-    float: left;
+.skillTooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: rgba(200,180,100,0.7);
+    border-bottom: 0;
+}
+
+#skill1:hover .skillTooltip,
+#skill2:hover .skillTooltip,
+#skill3:hover .skillTooltip,
+#skill4:hover .skillTooltip {
+    opacity: 1;
+}
+
+#skill1:hover, #skill2:hover, #skill3:hover, #skill4:hover {
+    background-color: rgba(120,100,60,0.8);
+    box-shadow: 0 0 15px rgba(200,180,100,0.4), inset 0 0 5px rgba(200,180,100,0.2);
 }
 
 #charInfo {
     position: absolute;
-    left: 0;
-    top: 0;
-    height: 95px;
-    width: 250px;
-    background-color: #00000069;
+    left: 12px;
+    top: 12px;
+    min-height: 120px;
+    width: 170px;
+    background: linear-gradient(180deg, rgba(30,25,15,0.92) 0%, rgba(15,10,5,0.92) 100%);
+    border: 2px solid rgba(200,180,100,0.5);
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.8), inset 0 0 10px rgba(200,180,100,0.1);
+    padding: 10px 14px 10px 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    font-size: 1em;
+}
+
+#charInfo #roleIcon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 8px;
+    background-size: contain;
+    background-position: center;
+    border-radius: 8px;
+    border: 2px solid rgba(200,180,100,0.5);
+}
+
+#charInfo input#name {
+    width: 110px;
+    text-align: center;
+    font-size: 1em;
+    margin-bottom: 8px;
+    border-radius: 6px;
+    border: 1px solid #888;
+    background: #23272e;
+    color: #fff;
+    padding: 4px 8px;
+}
+
+#charInfo #healthBar {
+    width: 100%;
+    height: 18px;
+    border-radius: 6px;
+    background: #222;
+    margin-bottom: 2px;
+}
+
+#charInfo #actionBar {
+    width: 100%;
+    height: 14px;
+    border-radius: 6px;
+    background: #222;
+}
+
+@media (max-width: 900px) and (orientation: landscape) {
+    #charInfo {
+        width: 110px !important;
+        min-height: 80px !important;
+        padding: 4px 6px !important;
+        font-size: 0.85em !important;
+        border-radius: 8px !important;
+        left: 4px !important;
+        top: 4px !important;
+        box-shadow: 0 1px 6px #000a !important;
+        gap: 6px !important;
+    }
+    #charInfo #roleIcon {
+        width: 32px !important;
+        height: 32px !important;
+        margin-bottom: 6px !important;
+    }
+    #charInfo input#name {
+        font-size: 0.85em !important;
+        width: 70px !important;
+        padding: 2px 4px !important;
+        margin-bottom: 6px !important;
+    }
+    #charInfo #healthBar {
+        height: 12px !important;
+        border-radius: 4px !important;
+    }
+    #charInfo #actionBar {
+        height: 8px !important;
+        border-radius: 4px !important;
+    }
+}
+
+@media (max-width: 900px) and (orientation: landscape) {
+    #charInfo {
+        width: 140px !important;
+        min-height: 36px !important;
+        padding: 2px 4px !important;
+        font-size: 0.8em !important;
+        border-radius: 6px !important;
+        left: 4px !important;
+        top: 4px !important;
+        box-shadow: 0 1px 6px #000a !important;
+        gap: 2px !important;
+    }
+    #charInfo > div:first-child {
+        gap: 4px !important;
+    }
+    #charInfo input#name {
+        font-size: 0.8em !important;
+        width: 60px !important;
+        padding: 1px 2px !important;
+    }
+    #healthBar {
+        height: 6px !important;
+        border-radius: 2px !important;
+    }
+}
+}
+
+@media (max-width: 900px) and (orientation: landscape) {
+    #charInfo {
+        width: 150px !important;
+        height: 60px !important;
+        padding: 4px !important;
+        font-size: 0.85em !important;
+        border-radius: 6px !important;
+        left: 6px !important;
+        top: 6px !important;
+        box-shadow: 0 1px 6px #000a !important;
+    }
+    #charInfo input#name {
+        font-size: 0.9em !important;
+        width: 80px !important;
+        padding: 2px 4px !important;
+    }
+    #healthBar {
+        height: 8px !important;
+        border-radius: 3px !important;
+    }
+}
+
+#roleIcon {
+    width: 50px;
+    height: 50px;
+    border: 2px solid rgba(200,180,100,0.6);
+    border-radius: 4px;
+    background-size: contain;
+
+    background-position: center;
+}
+
+#raidMembers {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 180px;
+    overflow-y: auto;
+}
+
+.raidMember {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #e0d5b7;
+}
+
+.raidMember .rmName {
+    width: 110px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.raidMember .rmBar {
+    height: 10px;
+    width: 120px;
+    background: rgba(0,0,0,0.6);
+    border: 1px solid rgba(200,180,100,0.4);
+    border-radius: 4px;
+    position: relative;
+}
+
+.raidMember .rmBarInner {
+    height: 100%;
+    border-radius: 3px;
+}
+
+#duelInfo {
+    position: fixed;
+    right: 12px;
+    top: 12px;
+    min-width: 180px;
+    background: linear-gradient(180deg, rgba(20,20,30,0.9), rgba(10,10,20,0.9));
+    border: 2px solid rgba(200,180,100,0.4);
+    padding: 8px;
+    border-radius: 6px;
+    color: #e0d5b7;
+    display: none;
+    z-index: 999;
+}
+
+#duelInfo.visible { display: block; }
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: rgba(100,80,40,0.3);
+    margin-bottom: 8px;
 }
 
 #name {
-    width: 134px;
-    height: 23px;
-    border: 2px solid black;
-    margin: 10px;
-    float: right;
+    width: 100%;
+    height: 20px;
+    border: 2px solid rgba(200,180,100,0.5);
+    border-radius: 4px;
+    margin-bottom: 6px;
+    padding: 4px;
+    box-sizing: border-box;
+    background-color: rgba(20,15,10,0.8);
+    color: #d0c0a0;
+    font-weight: bold;
+    font-size: 12px;
 }
 
 #health {
     position: relative;
-    width: 130px;
-    height: 10px;
-    border: 2px solid black;
-    margin: 10px;
-    margin-top: 8px;
-    margin-bottom: 3px;
-    float: right;
+    width: 100%;
+    height: 18px;
+    border: 2px solid rgba(200,100,100,0.6);
+    border-radius: 4px;
+    margin-bottom: 6px;
+    background-color: rgba(20,10,10,0.8);
+    box-sizing: border-box;
+    box-shadow: inset 0 0 8px rgba(0,0,0,0.6);
 }
 
 #healthBar {
     width: 100%;
     height: 100%;
-    background-color: red;
+    background: linear-gradient(90deg, #ff3333, #ff0000);
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(255,0,0,0.6), inset 0 0 3px rgba(255,255,255,0.2);
 }
 
 #healthText {
     position: absolute; 
     width: 100%;
     text-align: center;
-    font-size: 10px;
+    font-size: 11px;
+    font-weight: bold;
     left: 0;
     right: 0;
     margin-left: auto;
     margin-right: auto;
+    top: 2px;
+    color: #ffff99;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+}
+
+#action {
+    width: 100%;
+    height: 8px;
+    border: 2px solid rgba(100,150,200,0.5);
+    border-radius: 4px;
+    background-color: rgba(20,20,30,0.8);
+    box-sizing: border-box;
+    box-shadow: inset 0 0 8px rgba(0,0,0,0.6);
 }
 
 #actionBar {
     width: 100%;
     height: 100%;
-    background-color: blue;
-    text-align: center;
-    font-size: 10px;
-}
-
-#action {
-    width: 130px;
-    height: 10px;
-    border: 2px solid black;
-    margin: 10px;
-    margin-top: 0;
-    float: right;
-}
-
-#roleIcon {
-    height: 70px;
-    width: 70px;
-    border: 2px solid black;
-    margin: 10px;
-    float: left;
-    background-size: 60px;
-    background-repeat: no-repeat;
-    background-position: center;
+    background: linear-gradient(90deg, #4488ff, #0055ff);
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(100,150,200,0.6), inset 0 0 3px rgba(255,255,255,0.2);
 }
 
 #chat {
     position: absolute;
-    left: 0;
-    bottom: 0;
-    height: 250px;
+    left: 12px;
+    bottom: 100px;
     width: 400px;
-    background-color: #00000069;
+    height: 180px;
+    background: linear-gradient(180deg, rgba(20,20,30,0.85) 0%, rgba(10,10,20,0.85) 100%);
+    border: 2px solid rgba(100,150,200,0.5);
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.8), inset 0 0 10px rgba(100,150,200,0.1);
+    display: flex;
+    flex-direction: column;
 }
 
 #chatField {
-    height: 200px;
-    width: 384px;
-    margin: 5px;
-    margin-top: 7px;
-    margin-bottom: 7px;
-    border: 2px solid black;
-    overflow-y: scroll;
-    color: white;
+    flex: 1;
+    padding: 8px;
+    border: none;
+    border-bottom: 1px solid rgba(100,150,200,0.2);
+    overflow-y: auto;
+    color: #d0c0a0;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+#chatField div {
+    margin-bottom: 2px;
 }
 
 #chatinput {
-    height: 25px;
-    width: 388px;
-    margin: 5px;
-    margin-top: 0px;
-    border: 2px solid black;
+    height: 28px;
+    padding: 4px 8px;
+    border: none;
+    background-color: rgba(20,15,10,0.8);
+    color: #d0c0a0;
+    font-size: 12px;
+    border-top: 1px solid rgba(100,150,200,0.2);
+}
+
+#chatinput:focus {
+    outline: none;
+    background-color: rgba(30,25,15,0.9);
+    box-shadow: inset 0 0 5px rgba(100,150,200,0.2);
 }
 
 #playerMenu {
     position: absolute;
-    right: 0;
-    height: 320px;
+    right: 12px;
+    height: 300px;
+    width: 80px;
+    background: linear-gradient(180deg, rgba(30,25,15,0.85) 0%, rgba(15,10,5,0.85) 100%);
+    border: 2px solid rgba(200,180,100,0.5);
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.8), inset 0 0 10px rgba(200,180,100,0.1);
+    top: 12px;
+    padding: 8px;
+}
+
+#roleSelection, #classSelection {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 8px;
+    align-items: center;
+}
+
+#roleSelection .buttonIcon,
+#classSelection .buttonIcon {
+    height: 35px;
+    width: 35px;
+}
+
+.buttonIcon {
+    height: 50px;
     width: 50px;
-    background-color: #00000069;
-    top: 0;
-    bottom: 0;
-    margin-top: auto;
-    margin-bottom: auto;
-}
-
-#roleSelection {
-    height: 140px;
-}
-
-#dd {
-    height: 36px;
-    width: 36px;
-    background-image: url(../assets/icons/dd.png);
-    background-size: auto;
+    background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    margin: auto;
-    margin-top: 5px;
-    border: 2px solid black;
+    border: 2px solid rgba(200,180,100,0.6);
+    border-radius: 4px;
+    background-color: rgba(100,80,40,0.4);
+    transition: all 0.2s;
+    box-shadow: 0 0 6px rgba(0,0,0,0.5), inset 0 0 5px rgba(200,180,100,0.1);
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #d0c0a0;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.buttonIcon:hover {
+    background-color: rgba(120,100,60,0.8);
+    box-shadow: 0 0 12px rgba(200,180,100,0.4), inset 0 0 5px rgba(200,180,100,0.2);
+}
+
+.buttonIcon:active {
+    transform: scale(0.95);
+    box-shadow: inset 0 0 8px rgba(0,0,0,0.8);
+}
+
+/* Role Selection Icons */
+#dd {
+    background-image: url(../assets/icons/dd.png);
 }
 
 #tank {
-    height: 36px;
-    width: 36px;
     background-image: url(../assets/icons/tank.png);
-    background-size: auto;
-    background-repeat: no-repeat;
-    background-position: center;
-    margin: auto;
-    margin-top: 5px;
-    border: 2px solid black;
 }
 
 #heal {
-    height: 36px;
-    width: 36px;
     background-image: url(../assets/icons/heal.png);
-    background-size: auto;
-    background-repeat: no-repeat;
-    background-position: center;
-    margin: auto;
-    margin-top: 5px;
-    border: 2px solid black;
 }
 
+/* Class Selection Icons */
 #knight {
-    height: 36px;
-    width: 36px;
     background-image: url(../assets/icons/knight.png);
-    background-size: auto;
-    background-repeat: no-repeat;
-    background-position: center;
-    margin: auto;
-    margin-top: 5px;
-    border: 2px solid black;
 }
 
 #mage {
-    height: 36px;
-    width: 36px;
     background-image: url(../assets/icons/mage.png);
-    background-size: auto;
-    background-repeat: no-repeat;
-    background-position: center;
-    margin: auto;
-    margin-top: 5px;
-    border: 2px solid black;
 }
 
 #archer {
-    height: 36px;
-    width: 36px;
     background-image: url(../assets/icons/archer.png);
-    background-size: auto;
-    background-repeat: no-repeat;
-    background-position: center;
-    margin: auto;
-    margin-top: 5px;
-    border: 2px solid black;
-}
-
-#warrior {
-    height: 36px;
-    width: 36px;
-    background-image: url(../assets/icons/warrior.png);
-    background-size: auto;
-    background-repeat: no-repeat;
-    background-position: center;
-    margin: auto;
-    margin-top: 5px;
-    border: 2px solid black;
 }

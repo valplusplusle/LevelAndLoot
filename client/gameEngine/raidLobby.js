@@ -461,3 +461,41 @@ window.showRaidStartPopup = function() {
   popup.appendChild(buttonContainer);
   document.body.appendChild(popup);
 };
+
+window.showAdvancedRaidMenu = function() {
+  // Einfaches Popup mit Platzhaltern für die erweiterten Einstellungen
+  const popup = document.createElement('div');
+  popup.id = 'advancedRaidMenu';
+  popup.style.cssText = `
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(180deg, rgba(20,20,30,0.95) 0%, rgba(10,10,20,0.95) 100%);
+    border: 2px solid rgba(200,180,100,0.6);
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.8);
+    color: #e0d5b7;
+    z-index: 10003;
+    min-width: 340px;
+    text-align: left;
+  `;
+  popup.innerHTML = `
+    <div style="font-size: 18px; font-weight: bold; color: #ffcc66; margin-bottom: 18px;">Erweiterte Raid Einstellungen</div>
+    <div style="margin-bottom: 12px;">Boss-Lebenspunkte: <input type='number' min='100' max='100000' value='1000' style='width:80px;'></div>
+    <div style="margin-bottom: 12px;">Boss-Angriffe: <select><option>Standard</option><option>Feuer</option><option>Eis</option><option>Blitz</option></select></div>
+    <div style="margin-bottom: 12px;">Seed (optional): <input type='text' style='width:120px;'></div>
+    <div style="margin-bottom: 12px;">Weitere Optionen: <input type='checkbox'> Unbesiegbar <input type='checkbox'> Sofortiger Start</div>
+    <button id='startAdvancedRaidBtn' style='margin-top:18px; padding:8px 22px; background:linear-gradient(180deg,rgba(255,100,0,0.6) 0%,rgba(200,80,0,0.5) 100%); border:1px solid rgba(255,150,0,0.7); color:#ffcc66; border-radius:4px; font-weight:bold;'>Raid starten</button>
+    <button id='closeAdvancedRaidBtn' style='margin-left:12px; padding:8px 22px; background:linear-gradient(180deg,rgba(100,100,100,0.5) 0%,rgba(80,80,80,0.4) 100%); border:1px solid rgba(100,100,100,0.6); color:#a0a0a0; border-radius:4px; font-weight:bold;'>Schließen</button>
+  `;
+  document.body.appendChild(popup);
+  document.getElementById('closeAdvancedRaidBtn').onclick = function() {
+    popup.remove();
+  };
+  document.getElementById('startAdvancedRaidBtn').onclick = function() {
+    alert('Raid mit erweiterten Einstellungen wird gestartet!');
+    popup.remove();
+  };
+}

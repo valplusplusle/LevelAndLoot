@@ -320,45 +320,38 @@ window.handleCanvasClick = function(clickX, clickY) {
     }
   }
   
-  // Find the Raid Leiter NPC (name contains "Raid Leiter")
-  const npc = otherPlayers.find(p => p.name && p.name.includes('Raid Leiter'));
-  if (!npc) {
-    console.log('NPC not found. Available players:', otherPlayers.map(p => p.name));
-    return;
-  }
-  
-  console.log('NPC found at:', npc.x, npc.y);
-  const npcX = npc.x, npcY = npc.y;
-  
-  // Larger hitbox for easier clicking
-  const hitboxX = npcX - 10;
-  const hitboxY = npcY - 15;
-  const hitboxW = 50 + 20;
-  const hitboxH = 48 + 25;
-  
-  // Check if click is within hitbox
-  if (clickX >= hitboxX && clickX <= (hitboxX + hitboxW) && clickY >= hitboxY && clickY <= (hitboxY + hitboxH)) {
-    console.log('✓ Clicked on NPC hitbox');
-    // Check distance from player to NPC
-    const playerCx = player.x + 25;
-    const playerCy = player.y + 25;
-    const npcCx = npc.x + 25;
-    const npcCy = npc.y + 25;
-    const dist = Math.sqrt((playerCx - npcCx) ** 2 + (playerCy - npcCy) ** 2);
-    
-    // Only allow interaction if within 200 pixels
-    if (dist <= 200) {
-      console.log('✓ Sending requestRaidList');
-      // request raid list from server; UI will be populated when response arrives
-      webSocket.send(JSON.stringify({ event: 'requestRaidList' }));
-      const ui = document.getElementById('raidUI');
-      if (ui) ui.style.display = 'block';
-      console.log('✓ Raid Board sollte geöffnet sein! (Distanz: ' + Math.round(dist) + ' px)');
-    } else {
-      console.log('✗ Zu weit entfernt! (' + Math.round(dist) + ' px)');
+  // Finde beide Raid Leiter NPCs
+  const raidLeiterNpcs = otherPlayers.filter(p => p.name && p.name.startsWith('Raid Leiter'));
+  for (const npc of raidLeiterNpcs) {
+    const npcX = npc.x, npcY = npc.y;
+    const hitboxX = npcX - 10;
+    const hitboxY = npcY - 15;
+    const hitboxW = 70;
+    const hitboxH = 73;
+    if (clickX >= hitboxX && clickX <= (hitboxX + hitboxW) && clickY >= hitboxY && clickY <= (hitboxY + hitboxH)) {
+      const playerCx = player.x + 25;
+      const playerCy = player.y + 25;
+      const npcCx = npc.x + 25;
+      const npcCy = npc.y + 25;
+      const dist = Math.sqrt((playerCx - npcCx) ** 2 + (playerCy - npcCy) ** 2);
+      if (dist <= 200) {
+        if (npc.name === 'Raid Leiter') {
+          // Standard Raid Board
+          webSocket.send(JSON.stringify({ event: 'requestRaidList' }));
+          const ui = document.getElementById('raidUI');
+          if (ui) ui.style.display = 'block';
+          console.log('✓ Raid Board sollte geöffnet sein! (Distanz: ' + Math.round(dist) + ' px)');
+        } else if (npc.name === 'Raid Leiter 2') {
+          // Erweiterte Raid Einstellungen
+          if (typeof showAdvancedRaidMenu === 'function') {
+            showAdvancedRaidMenu();
+          } else {
+            alert('Advanced Raid Menü nicht implementiert!');
+          }
+        }
+        return;
+      }
     }
-  } else {
-    console.log('Click nicht im NPC-Hitbox. NPC:', {x: npcX, y: npcY, w: hitboxW, h: hitboxH}, 'Click:', {x: clickX, y: clickY});
   }
   // Beispiel: Prüfe auf Raid Leiter
   if (typeof isRaidLeiterClicked === 'function' && isRaidLeiterClicked(clickX, clickY)) {
@@ -378,23 +371,3 @@ window.handleCanvasClick = function(clickX, clickY) {
   return 'none';
 };
 
-// --- DEBUG: NPC-Hitbox visualisieren ---
-function drawRaidLeiterHitbox() {
-  if (!window.otherPlayers) return;
-  const npc = otherPlayers.find(p => p.name && p.name.includes('Raid Leiter'));
-  if (!npc) return;
-  const ctx = window.context || (window.canvas && window.canvas.getContext && window.canvas.getContext('2d'));
-  if (!ctx) return;
-  const npcX = npc.x, npcY = npc.y;
-  const hitboxX = npcX - 10;
-  const hitboxY = npcY - 15;
-  const hitboxW = 70;
-  const hitboxH = 73;
-  ctx.save();
-  ctx.strokeStyle = '#ff00ff';
-  ctx.lineWidth = 2;
-  ctx.setLineDash([6, 4]);
-  ctx.strokeRect(hitboxX, hitboxY, hitboxW, hitboxH);
-  ctx.restore();
-}
-window.drawRaidLeiterHitbox = drawRaidLeiterHitbox;

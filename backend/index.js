@@ -358,9 +358,10 @@ let raidNpcId = null;              // track the NPC bot
 // Initialize Raid NPC Bot
 // ---------------------------
 function createRaidNpcBot() {
-  const botId = "bot-raid-leiter-" + uuid();
-  const npc = {
-    id: botId,
+  // Erster Raid Leiter (Mage)
+  const botId1 = "bot-raid-leiter-" + uuid();
+  const npc1 = {
+    id: botId1,
     name: "Raid Leiter",
     x: 700,
     y: 400,
@@ -374,22 +375,48 @@ function createRaidNpcBot() {
     armor: 0,
     inFight: false,
     fightId: null,
-    ws: null,  // bots have no websocket
-
+    ws: null,
     state: "idle",
     lastState: "idle",
     direction: "right",
     dead: false,
     buffs: [],
     cooldowns: {},
-    
-    // NPC movement
     moveTimer: 0,
     moveTarget: { x: 700, y: 400 }
   };
-  playersById.set(botId, npc);
-  raidNpcId = botId;
-  return npc;
+  playersById.set(botId1, npc1);
+  raidNpcId = botId1;
+
+  // Zweiter Raid Leiter (Knight)
+  const botId2 = "bot-raid-leiter2-" + uuid();
+  const npc2 = {
+    id: botId2,
+    name: "Raid Leiter 2",
+    x: 200,
+    y: 400,
+    startX: 200,
+    startY: 400,
+    world: "city-1",
+    role: "tank",
+    playerClass: "knight",
+    maxHealth: 100,
+    health: 100,
+    armor: 0,
+    inFight: false,
+    fightId: null,
+    ws: null,
+    state: "idle",
+    lastState: "idle",
+    direction: "right",
+    dead: false,
+    buffs: [],
+    cooldowns: {},
+    moveTimer: 0,
+    moveTarget: { x: 200, y: 400 }
+  };
+  playersById.set(botId2, npc2);
+  return [npc1, npc2];
 }
 
 function updateRaidNpcBot() {

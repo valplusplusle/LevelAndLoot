@@ -24,6 +24,8 @@ function renderCity1() {
       context.drawImage(cityGroundImg, 928, 544, 64, 64, x, y, 32, 32);
     }
   }
+  // --- DEBUG: NPC-Hitbox anzeigen ---
+  if (typeof window.drawRaidLeiterHitbox === 'function') window.drawRaidLeiterHitbox();
 }
 
 function renderArena() {

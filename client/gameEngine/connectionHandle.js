@@ -291,7 +291,7 @@ var intervalId = window.setInterval(function(){
 
 // Handle canvas clicks for raid NPC interaction
 window.handleCanvasClick = function(clickX, clickY) {
-  console.log('Canvas clicked at:', clickX, clickY);
+  console.log('[handleCanvasClick] called with:', { clickX, clickY });
   if (typeof player === 'undefined' || player.world !== 'city-1') {
     console.log('Player not ready or not in city-1');
     return;
@@ -360,4 +360,41 @@ window.handleCanvasClick = function(clickX, clickY) {
   } else {
     console.log('Click nicht im NPC-Hitbox. NPC:', {x: npcX, y: npcY, w: hitboxW, h: hitboxH}, 'Click:', {x: clickX, y: clickY});
   }
+  // Beispiel: Prüfe auf Raid Leiter
+  if (typeof isRaidLeiterClicked === 'function' && isRaidLeiterClicked(clickX, clickY)) {
+    console.log('[handleCanvasClick] Raid Leiter clicked!');
+    if (typeof showRaidUI === 'function') showRaidUI();
+    return 'raidleiter';
+  }
+  // Beispiel: Prüfe auf Spieler (Duel)
+  if (typeof isPlayerClicked === 'function') {
+    const player = isPlayerClicked(clickX, clickY);
+    if (player) {
+      console.log('[handleCanvasClick] Player clicked for duel:', player);
+      if (typeof showDuelChallengePopup === 'function') showDuelChallengePopup(player);
+      return 'duel';
+    }
+  }
+  return 'none';
 };
+
+// --- DEBUG: NPC-Hitbox visualisieren ---
+function drawRaidLeiterHitbox() {
+  if (!window.otherPlayers) return;
+  const npc = otherPlayers.find(p => p.name && p.name.includes('Raid Leiter'));
+  if (!npc) return;
+  const ctx = window.context || (window.canvas && window.canvas.getContext && window.canvas.getContext('2d'));
+  if (!ctx) return;
+  const npcX = npc.x, npcY = npc.y;
+  const hitboxX = npcX - 10;
+  const hitboxY = npcY - 15;
+  const hitboxW = 70;
+  const hitboxH = 73;
+  ctx.save();
+  ctx.strokeStyle = '#ff00ff';
+  ctx.lineWidth = 2;
+  ctx.setLineDash([6, 4]);
+  ctx.strokeRect(hitboxX, hitboxY, hitboxW, hitboxH);
+  ctx.restore();
+}
+window.drawRaidLeiterHitbox = drawRaidLeiterHitbox;

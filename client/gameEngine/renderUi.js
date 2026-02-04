@@ -9,12 +9,6 @@ function renderUI() {
     } else if (window.raidGroupBox) {
         raidGroupBox.style.display = 'none';
     }
-// Import draggable raid group box
-if (typeof showRaidGroupBox === 'undefined') {
-    const script = document.createElement('script');
-    script.src = './gameEngine/raidGroupBox.js';
-    document.head.appendChild(script);
-}
 }
 
 function renderRole() {

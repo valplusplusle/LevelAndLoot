@@ -5,13 +5,15 @@
         image-rendering: -webkit-crisp-edges;
         image-rendering: pixelated;
         image-rendering: crisp-edges;
-        height: 100vh;
+        min-height: 100vh;
+        max-height: 100vh;
     }
 
     body {
         margin: 0;
-        background-color: #202020;
-        background-image: url(./assets/backgroundBricks.png);
+        padding: 0;
+        overflow: hidden;
+        background: #202020;
     }
     
     #raidUI {
@@ -315,3 +317,4 @@
 <script src="./gameEngine/connectionHandle.js"></script>
 <script src="./gameEngine/raidLobby.js"></script>
 <script src="./gameEngine/chat.js"></script>
+<script src="./gameEngine/raidGroupBox.js"></script>

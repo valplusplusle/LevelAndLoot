@@ -1,4 +1,4 @@
-  // Ensure UI stays visible in fullscreen
+// Ensure UI stays visible in fullscreen
   function updateFullscreenClass() {
     if (document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
       document.body.classList.add('fullscreen');

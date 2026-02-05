@@ -206,6 +206,42 @@
         font-style: italic;
         font-size: 12px;
     }
+    
+    /* Custom Raid Settings Styles */
+    #customRaidUI input[type="range"]::-webkit-slider-thumb {
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        background: rgba(200,180,100,0.9);
+        cursor: pointer;
+        border-radius: 50%;
+        box-shadow: 0 0 8px rgba(200,180,100,0.5);
+    }
+    
+    #customRaidUI input[type="range"]::-moz-range-thumb {
+        width: 18px;
+        height: 18px;
+        background: rgba(200,180,100,0.9);
+        cursor: pointer;
+        border-radius: 50%;
+        box-shadow: 0 0 8px rgba(200,180,100,0.5);
+    }
+    
+    #createCustomRaidBtn:hover {
+        background: linear-gradient(180deg, rgba(120,200,120,0.7) 0%, rgba(100,170,100,0.6) 100%);
+        box-shadow: 0 0 15px rgba(100,180,100,0.6);
+    }
+    
+    #cancelCustomRaidBtn:hover {
+        background: linear-gradient(180deg, rgba(120,120,120,0.6) 0%, rgba(100,100,100,0.5) 100%);
+        box-shadow: 0 0 10px rgba(100,100,100,0.4);
+    }
+    
+    #customRaidClose:hover {
+        background: rgba(200,50,50,0.6);
+        box-shadow: 0 0 10px rgba(200,50,50,0.4);
+    }
+
 </style>
 
 <div style="width: 100vw; height: 100vh;">
@@ -298,6 +334,114 @@
                 <button id="startRaidBtn" class="raidUIButton" style="display:none; background: linear-gradient(180deg, rgba(255,100,0,0.5) 0%, rgba(200,80,0,0.4) 100%); border-color: rgba(255,150,0,0.6); color: #ffcc66;">⚡ Raid Starten</button>
                 <button id="createRaidBtn" class="raidUIButton">+ Neuer Raid</button>
                 <button id="closeRaidBtn" class="raidUIButton">Schließen</button>
+            </div>
+        </div>
+
+        <!-- Custom Raid Settings UI -->
+        <div id="customRaidUI" style="display:none; position:fixed; left:50%; top:50%; transform:translate(-50%, -50%); width:520px; max-height:80vh; overflow-y:auto; background:linear-gradient(180deg, rgba(20,20,30,0.98) 0%, rgba(10,10,20,0.98) 100%); border:2px solid rgba(200,180,100,0.6); border-radius:10px; box-shadow:0 0 30px rgba(0,0,0,0.9); color:#e0d5b7; z-index:10000; font-family:Arial,sans-serif;">
+            <div id="customRaidHeader" style="background:linear-gradient(180deg, rgba(200,180,100,0.3) 0%, rgba(200,180,100,0.1) 100%); padding:15px 20px; border-bottom:1px solid rgba(200,180,100,0.4); font-weight:700; font-size:18px; cursor:move; user-select:none; text-align:center; text-shadow:0 2px 4px rgba(0,0,0,0.8); display:flex; justify-content:space-between; align-items:center;">
+                <span>⚙️ CUSTOM RAID SETTINGS</span>
+                <button id="customRaidClose" style="background:rgba(200,50,50,0.3); border:1px solid rgba(200,100,100,0.5); color:#ff9999; padding:4px 10px; cursor:pointer; font-size:12px; font-weight:bold; border-radius:3px; transition:all 0.2s;">✕</button>
+            </div>
+            <div style="padding:20px;">
+                <!-- Seed Input -->
+                <div class="customRaidSetting">
+                    <label style="display:block; margin-bottom:8px; font-weight:bold; color:#ffcc66; font-size:14px;">Seed (optional - für wiederholbare Raids):</label>
+                    <input type="text" id="raidSeed" placeholder="Leer lassen für zufällig" style="width:100%; padding:8px; background:rgba(0,0,0,0.4); border:1px solid rgba(200,180,100,0.3); border-radius:4px; color:#e0d5b7; font-size:13px;">
+                </div>
+
+                <!-- Boss Health -->
+                <div class="customRaidSetting" style="margin-top:18px;">
+                    <label style="display:block; margin-bottom:8px; font-weight:bold; color:#ffcc66; font-size:14px;">Boss Leben:</label>
+                    <div style="display:flex; align-items:center; gap:12px;">
+                        <input type="range" id="bossHealth" min="100" max="10000" value="1000" step="100" style="flex:1; height:6px; background:rgba(200,180,100,0.3); border-radius:3px; outline:none; cursor:pointer;">
+                        <span id="bossHealthValue" style="min-width:70px; text-align:right; color:#a0d0ff; font-weight:bold;">1000</span>
+                    </div>
+                </div>
+
+                <!-- Boss Damage Multiplier -->
+                <div class="customRaidSetting" style="margin-top:18px;">
+                    <label style="display:block; margin-bottom:8px; font-weight:bold; color:#ffcc66; font-size:14px;">Boss Schaden (Multiplikator):</label>
+                    <div style="display:flex; align-items:center; gap:12px;">
+                        <input type="range" id="bossDamage" min="0.5" max="3.0" value="1.0" step="0.1" style="flex:1; height:6px; background:rgba(200,180,100,0.3); border-radius:3px; outline:none; cursor:pointer;">
+                        <span id="bossDamageValue" style="min-width:70px; text-align:right; color:#ff9999; font-weight:bold;">1.0x</span>
+                    </div>
+                </div>
+
+                <!-- Boss Speed Multiplier -->
+                <div class="customRaidSetting" style="margin-top:18px;">
+                    <label style="display:block; margin-bottom:8px; font-weight:bold; color:#ffcc66; font-size:14px;">Boss Geschwindigkeit:</label>
+                    <div style="display:flex; align-items:center; gap:12px;">
+                        <input type="range" id="bossSpeed" min="0.5" max="2.5" value="1.0" step="0.1" style="flex:1; height:6px; background:rgba(200,180,100,0.3); border-radius:3px; outline:none; cursor:pointer;">
+                        <span id="bossSpeedValue" style="min-width:70px; text-align:right; color:#ffcc66; font-weight:bold;">1.0x</span>
+                    </div>
+                </div>
+
+                <!-- Boss Mode -->
+                <div class="customRaidSetting" style="margin-top:18px;">
+                    <label style="display:block; margin-bottom:10px; font-weight:bold; color:#ffcc66; font-size:14px;">Boss Bewegungsmodus:</label>
+                    <div style="display:flex; gap:10px;">
+                        <button class="bossModeBtn" data-mode="stand" style="flex:1; padding:10px; background:rgba(100,100,100,0.4); border:2px solid rgba(150,150,150,0.5); color:#d0d0d0; cursor:pointer; border-radius:5px; font-weight:bold; transition:all 0.2s;">Stillstehen</button>
+                        <button class="bossModeBtn" data-mode="chase" style="flex:1; padding:10px; background:rgba(100,100,100,0.4); border:2px solid rgba(150,150,150,0.5); color:#d0d0d0; cursor:pointer; border-radius:5px; font-weight:bold; transition:all 0.2s;">Verfolgen</button>
+                        <button class="bossModeBtn" data-mode="teleport" style="flex:1; padding:10px; background:rgba(100,100,100,0.4); border:2px solid rgba(150,150,150,0.5); color:#d0d0d0; cursor:pointer; border-radius:5px; font-weight:bold; transition:all 0.2s;">Teleport</button>
+                    </div>
+                </div>
+
+                <!-- Attack Selection -->
+                <div class="customRaidSetting" style="margin-top:18px;">
+                    <label style="display:block; margin-bottom:10px; font-weight:bold; color:#ffcc66; font-size:14px;">Boss Attacken:</label>
+                    <div style="background:rgba(0,0,0,0.3); padding:12px; border-radius:6px; border:1px solid rgba(200,180,100,0.2);">
+                        <div style="margin-bottom:10px;">
+                            <label style="display:flex; align-items:center; gap:8px; padding:8px; background:rgba(200,180,100,0.1); border-radius:4px; cursor:pointer;">
+                                <input type="checkbox" class="attackCheckbox" data-attack="slam" checked style="width:18px; height:18px; cursor:pointer;">
+                                <span style="flex:1; color:#d0c0a0;">Slam (18 Schaden, 120 Radius)</span>
+                            </label>
+                        </div>
+                        <div style="margin-bottom:10px;">
+                            <label style="display:flex; align-items:center; gap:8px; padding:8px; background:rgba(200,180,100,0.1); border-radius:4px; cursor:pointer;">
+                                <input type="checkbox" class="attackCheckbox" data-attack="bigSlam" checked style="width:18px; height:18px; cursor:pointer;">
+                                <span style="flex:1; color:#d0c0a0;">Big Slam (28 Schaden, 170 Radius)</span>
+                            </label>
+                        </div>
+                        <div>
+                            <label style="display:flex; align-items:center; gap:8px; padding:8px; background:rgba(200,180,100,0.1); border-radius:4px; cursor:pointer;">
+                                <input type="checkbox" class="attackCheckbox" data-attack="beam" checked style="width:18px; height:18px; cursor:pointer;">
+                                <span style="flex:1; color:#d0c0a0;">Beam (22 Schaden, 330 Länge)</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mechanics Selection -->
+                <div class="customRaidSetting" style="margin-top:18px;">
+                    <label style="display:block; margin-bottom:10px; font-weight:bold; color:#ffcc66; font-size:14px;">Raid Mechaniken:</label>
+                    <div style="background:rgba(0,0,0,0.3); padding:12px; border-radius:6px; border:1px solid rgba(200,180,100,0.2);">
+                        <div style="margin-bottom:10px;">
+                            <label style="display:flex; align-items:center; gap:8px; padding:8px; background:rgba(200,180,100,0.1); border-radius:4px; cursor:pointer;">
+                                <input type="checkbox" class="mechanicCheckbox" data-mechanic="movingHazard" checked style="width:18px; height:18px; cursor:pointer;">
+                                <span style="flex:1; color:#d0c0a0;">Moving Hazard (25 Schaden)</span>
+                            </label>
+                        </div>
+                        <div style="margin-bottom:10px;">
+                            <label style="display:flex; align-items:center; gap:8px; padding:8px; background:rgba(200,180,100,0.1); border-radius:4px; cursor:pointer;">
+                                <input type="checkbox" class="mechanicCheckbox" data-mechanic="checkerboard" checked style="width:18px; height:18px; cursor:pointer;">
+                                <span style="flex:1; color:#d0c0a0;">Checkerboard (30 Schaden)</span>
+                            </label>
+                        </div>
+                        <div>
+                            <label style="display:flex; align-items:center; gap:8px; padding:8px; background:rgba(200,180,100,0.1); border-radius:4px; cursor:pointer;">
+                                <input type="checkbox" class="mechanicCheckbox" data-mechanic="safeZone" checked style="width:18px; height:18px; cursor:pointer;">
+                                <span style="flex:1; color:#d0c0a0;">Safe Zone (35 Schaden)</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div style="margin-top:25px; display:flex; gap:12px;">
+                    <button id="createCustomRaidBtn" style="flex:1; padding:14px; background:linear-gradient(180deg, rgba(100,180,100,0.5) 0%, rgba(80,150,80,0.4) 100%); border:2px solid rgba(100,180,100,0.6); color:#a0ffa0; cursor:pointer; font-size:15px; font-weight:bold; border-radius:6px; transition:all 0.2s; text-shadow:0 1px 3px rgba(0,0,0,0.7);">⚔️ Raid Erstellen & Starten</button>
+                    <button id="cancelCustomRaidBtn" style="padding:14px 24px; background:linear-gradient(180deg, rgba(100,100,100,0.5) 0%, rgba(80,80,80,0.4) 100%); border:2px solid rgba(100,100,100,0.6); color:#d0d0d0; cursor:pointer; font-size:15px; font-weight:bold; border-radius:6px; transition:all 0.2s;">Abbrechen</button>
+                </div>
             </div>
         </div>
     </div>

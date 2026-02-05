@@ -457,6 +457,46 @@ function updateRaidNpcBot() {
   }
 }
 
+function updateRaidNpcBot2() {
+  // Update Raid Leiter 2 (second NPC)
+  const allPlayers = Array.from(playersById.values());
+  const npc2 = allPlayers.find(p => p.name === 'Raid Leiter 2');
+  if (!npc2) return;
+  
+  // Random walk every 2-4 seconds (different timing than first NPC)
+  npc2.moveTimer = (npc2.moveTimer || 0) + 1;
+  const moveInterval = 120 + Math.floor(Math.random() * 120); // ~2-4 sec at 30Hz
+  
+  if (npc2.moveTimer > moveInterval) {
+    npc2.moveTimer = 0;
+    const moveX = (Math.random() - 0.5) * 100;
+    const moveY = (Math.random() - 0.5) * 60;
+    npc2.moveTarget = {
+      x: Math.max(150, Math.min(250, npc2.startX + moveX)),
+      y: Math.max(350, Math.min(450, npc2.startY + moveY))
+    };
+    
+    if (Math.abs(npc2.moveTarget.x - npc2.x) > 5) {
+      npc2.direction = npc2.moveTarget.x > npc2.x ? 'right' : 'left';
+      npc2.state = 'run';
+    } else {
+      npc2.state = 'idle';
+    }
+  }
+  
+  // Move towards target
+  if (Math.abs(npc2.moveTarget.x - npc2.x) > 2) {
+    npc2.x += (npc2.moveTarget.x - npc2.x) * 0.06; // Slightly faster movement
+  }
+  if (Math.abs(npc2.moveTarget.y - npc2.y) > 2) {
+    npc2.y += (npc2.moveTarget.y - npc2.y) * 0.06;
+  }
+  
+  if (Math.abs(npc2.moveTarget.x - npc2.x) <= 2 && Math.abs(npc2.moveTarget.y - npc2.y) <= 2) {
+    npc2.state = 'idle';
+  }
+}
+
 // ---------------------------
 // Messaging
 // ---------------------------
@@ -496,8 +536,9 @@ createRaidNpcBot();
 
 // lobby snapshots @ ~30Hz (smooth)
 setInterval(() => {
-  // Update NPC bot first
+  // Update NPC bots first
   updateRaidNpcBot();
+  updateRaidNpcBot2();
   
   broadcast({ event: "lobbySnapshot", lobby: lobbySnapshot() });
 }, 33);
@@ -613,7 +654,115 @@ function createRaid(seedValue) {
   return raid;
 }
 
+function createCustomRaid(player, settings) {
+  const raidId = "raid-" + uuid();
+  
+  // Use provided seed or generate new one
+  const seed = settings.seed ? hashSeed(settings.seed) : hashSeed(raidId);
+  const rng = mulberry32(seed);
+
+  // Parse settings with defaults
+  const bossHealth = settings.bossHealth || 1000;
+  const bossDamage = settings.bossDamage || 1.0;
+  const bossSpeed = settings.bossSpeed || 1.0;
+  const bossMode = settings.bossMode || "stand";
+  const attacks = settings.attacks && settings.attacks.length > 0 ? settings.attacks : ["slam", "bigSlam", "beam"];
+  const mechanics = settings.mechanics && settings.mechanics.length > 0 ? settings.mechanics : ["movingHazard", "checkerboard", "safeZone"];
+
+  // Create rotation from selected attacks
+  const rotation = [];
+  for (let i = 0; i < 80; i++) {
+    const idx = Math.floor(rng() * attacks.length);
+    rotation.push(attacks[idx]);
+  }
+
+  // Create mechanic rotation from selected mechanics
+  const mechanicRotation = [];
+  const mechanicCount = 5; // Fixed count for custom raids
+  for (let i = 0; i < mechanicCount; i++) {
+    const idx = Math.floor(rng() * mechanics.length);
+    mechanicRotation.push(mechanics[idx]);
+  }
+
+  const raid = {
+    id: raidId,
+    seed,
+    createdAt: now(),
+    leaderId: player.id,
+    members: [],
+    startedAt: null,
+    endedAt: null,
+
+    rotation,
+    rotationIndex: 0,
+    phase: "idle",
+    phaseEndsAt: 0,
+    currentAttack: null,
+    telegraphs: [],
+    mitigationZones: [],
+    
+    // Mechanics
+    mechanicRotation,
+    mechanicIndex: 0,
+    currentMechanic: null,
+    mechanicData: null,
+    hazards: [],
+
+    damageMult: bossDamage,
+    speedMult: bossSpeed,
+    
+    boss: {
+      x: 400, y: 280,
+      maxHealth: bossHealth, 
+      health: bossHealth,
+      targetId: null,
+
+      mode: bossMode,
+      speed: 70 * bossSpeed,
+      nextMoveDecisionAt: 0,
+      nextTeleportAt: 0,
+      anim: "idle",
+      animUntil: 0
+    },
+    
+    // Stats tracking
+    stats: {},
+    
+    // Mark as custom raid
+    isCustom: true,
+    customSettings: settings
+  };
+
+  raids.set(raidId, raid);
+  console.log(`[CUSTOM RAID] Created ${raidId} with settings:`, {
+    seed: settings.seed || 'random',
+    bossHealth,
+    bossDamage,
+    bossSpeed,
+    bossMode,
+    attacks,
+    mechanics
+  });
+  return raid;
+}
+
 function raidApplyScaling(raid) {
+  // Skip scaling for custom raids or apply modified scaling
+  if (raid.isCustom) {
+    const n = Math.max(1, raid.members.length);
+    const baseHealth = raid.customSettings.bossHealth || 1000;
+    
+    // Apply only partial scaling for custom raids (30% instead of 85%)
+    const hpMult = 1 + 0.3 * (n - 1);
+    raid.boss.maxHealth = Math.round(baseHealth * hpMult);
+    raid.boss.health = raid.boss.maxHealth;
+    
+    // Keep custom damage and speed settings
+    // damageMult and speedMult already set during creation
+    return;
+  }
+  
+  // Standard scaling for normal raids
   const n = Math.max(1, raid.members.length);
 
   const hpMult = 1 + 0.85 * (n - 1);
@@ -633,14 +782,17 @@ function raidStart(raid) {
   raid.mechanicRotation = generateMechanicRotation(raid.seed, raid.members.length);
   raid.mechanicIndex = 0;
 
-  // movement personality derived from seed (deterministic per seed)
+  // movement personality derived from seed (deterministic per seed) or custom setting
   const rng = mulberry32(raid.seed);
 
-  // three archetypes:
-  const roll = rng();
-  if (roll < 0.34) raid.boss.mode = "stand";
-  else if (roll < 0.67) raid.boss.mode = "chase";
-  else raid.boss.mode = "teleport";
+  // For custom raids, use the specified mode, otherwise determine randomly
+  if (!raid.isCustom) {
+    const roll = rng();
+    if (roll < 0.34) raid.boss.mode = "stand";
+    else if (roll < 0.67) raid.boss.mode = "chase";
+    else raid.boss.mode = "teleport";
+  }
+  // For custom raids, mode is already set during creation
 
   // timings (also deterministic but feel natural)
   raid.boss.nextMoveDecisionAt = now() + 1200 + Math.floor(rng() * 1200);
@@ -660,6 +812,24 @@ function raidStart(raid) {
   // Schedule mechanics throughout the raid
   scheduleMechanics(raid);
   raid.nextMechanicIndex = 0;
+  
+  // Teleport all raid members to raid world
+  for (const memberData of raid.members) {
+    const memberId = typeof memberData === 'string' ? memberData : memberData.id;
+    const p = playersById.get(memberId);
+    if (!p) continue;
+    
+    p.world = raid.id;
+    p.x = 100 + Math.random() * 200;
+    p.y = 400 + Math.random() * 100;
+    p.health = p.maxHealth;
+    p.dead = false;
+    
+    if (p.ws) {
+      send(p.ws, { event: "raidJoined", raidId: raid.id, seed: raid.seed });
+      send(p.ws, { event: "systemMessage", text: "Raid startet - viel Erfolg!" });
+    }
+  }
   
   console.log(`[RAID] Starting raid ${raid.id.substring(0, 8)}... with mechanics:`, raid.mechanicRotation);
 }
@@ -1518,6 +1688,45 @@ wss.on("connection", function connection(ws) {
       return;
     }
 
+    if (msg.event === "createCustomRaid") {
+      const pid = wsToPlayerId.get(ws);
+      const me = pid ? playersById.get(pid) : null;
+      if (!me) return;
+      
+      if (me.inFight) {
+        return send(ws, { event: "systemMessage", text: "Du bist bereits in einem Fight." });
+      }
+      
+      const settings = msg.settings || {};
+      const raid = createCustomRaid(me, settings);
+      
+      // Add player to raid
+      me.inFight = true;
+      me.fightId = raid.id;
+      me.dead = false;
+      me.health = me.maxHealth;
+      
+      raid.members.push(me.id);
+      raid.leaderId = me.id;
+      
+      send(ws, { event: "systemMessage", text: "Custom Raid erstellt: " + raid.id });
+      
+      // Start the raid (this will teleport player and send raidJoined)
+      raidStart(raid);
+      
+      // Send raid state to player
+      send(ws, { event: "raidState", raid: raidSnapshot(raid) });
+      
+      broadcast({
+        event: "raidStarted",
+        raidId: raid.id,
+        members: raid.members
+      });
+      
+      send(ws, { event: "systemMessage", text: "Custom Raid gestartet!" });
+      return;
+    }
+
     // Player snapshot (from your client)
     const playerId = msg.id;
     if (!playerId) return;
@@ -1629,7 +1838,8 @@ function updateBossMovement(raid, alivePlayers) {
   if (raid.boss.animUntil > t) return;
 
   // occasionally re-decide behavior (seeded)
-  if (t >= raid.boss.nextMoveDecisionAt) {
+  // Skip mode changes for custom raids - they have a fixed mode
+  if (!raid.isCustom && t >= raid.boss.nextMoveDecisionAt) {
     const roll = rng();
     if (roll < 0.33) raid.boss.mode = "stand";
     else if (roll < 0.75) raid.boss.mode = "chase";

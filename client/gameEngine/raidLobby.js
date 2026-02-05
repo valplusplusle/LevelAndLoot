@@ -463,39 +463,131 @@ window.showRaidStartPopup = function() {
 };
 
 window.showAdvancedRaidMenu = function() {
-  // Einfaches Popup mit Platzhaltern für die erweiterten Einstellungen
-  const popup = document.createElement('div');
-  popup.id = 'advancedRaidMenu';
-  popup.style.cssText = `
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    background: linear-gradient(180deg, rgba(20,20,30,0.95) 0%, rgba(10,10,20,0.95) 100%);
-    border: 2px solid rgba(200,180,100,0.6);
-    border-radius: 8px;
-    padding: 24px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.8);
-    color: #e0d5b7;
-    z-index: 10003;
-    min-width: 340px;
-    text-align: left;
-  `;
-  popup.innerHTML = `
-    <div style="font-size: 18px; font-weight: bold; color: #ffcc66; margin-bottom: 18px;">Erweiterte Raid Einstellungen</div>
-    <div style="margin-bottom: 12px;">Boss-Lebenspunkte: <input type='number' min='100' max='100000' value='1000' style='width:80px;'></div>
-    <div style="margin-bottom: 12px;">Boss-Angriffe: <select><option>Standard</option><option>Feuer</option><option>Eis</option><option>Blitz</option></select></div>
-    <div style="margin-bottom: 12px;">Seed (optional): <input type='text' style='width:120px;'></div>
-    <div style="margin-bottom: 12px;">Weitere Optionen: <input type='checkbox'> Unbesiegbar <input type='checkbox'> Sofortiger Start</div>
-    <button id='startAdvancedRaidBtn' style='margin-top:18px; padding:8px 22px; background:linear-gradient(180deg,rgba(255,100,0,0.6) 0%,rgba(200,80,0,0.5) 100%); border:1px solid rgba(255,150,0,0.7); color:#ffcc66; border-radius:4px; font-weight:bold;'>Raid starten</button>
-    <button id='closeAdvancedRaidBtn' style='margin-left:12px; padding:8px 22px; background:linear-gradient(180deg,rgba(100,100,100,0.5) 0%,rgba(80,80,80,0.4) 100%); border:1px solid rgba(100,100,100,0.6); color:#a0a0a0; border-radius:4px; font-weight:bold;'>Schließen</button>
-  `;
-  document.body.appendChild(popup);
-  document.getElementById('closeAdvancedRaidBtn').onclick = function() {
-    popup.remove();
-  };
-  document.getElementById('startAdvancedRaidBtn').onclick = function() {
-    alert('Raid mit erweiterten Einstellungen wird gestartet!');
-    popup.remove();
-  };
-}
+  const ui = document.getElementById('customRaidUI');
+  if (!ui) return;
+  
+  ui.style.display = 'block';
+  
+  // Make draggable
+  makeWindowDraggable('customRaidUI', 'customRaidHeader');
+};
+
+// Initialize Custom Raid Settings UI
+window.addEventListener('load', function() {
+  const customUI = document.getElementById('customRaidUI');
+  if (!customUI) return;
+  
+  // Slider updates
+  const bossHealthSlider = document.getElementById('bossHealth');
+  const bossHealthValue = document.getElementById('bossHealthValue');
+  const bossDamageSlider = document.getElementById('bossDamage');
+  const bossDamageValue = document.getElementById('bossDamageValue');
+  const bossSpeedSlider = document.getElementById('bossSpeed');
+  const bossSpeedValue = document.getElementById('bossSpeedValue');
+  
+  if (bossHealthSlider) {
+    bossHealthSlider.addEventListener('input', function() {
+      bossHealthValue.textContent = this.value;
+    });
+  }
+  
+  if (bossDamageSlider) {
+    bossDamageSlider.addEventListener('input', function() {
+      bossDamageValue.textContent = parseFloat(this.value).toFixed(1) + 'x';
+    });
+  }
+  
+  if (bossSpeedSlider) {
+    bossSpeedSlider.addEventListener('input', function() {
+      bossSpeedValue.textContent = parseFloat(this.value).toFixed(1) + 'x';
+    });
+  }
+  
+  // Boss Mode Button Selection
+  let selectedMode = 'stand';
+  document.querySelectorAll('.bossModeBtn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.bossModeBtn').forEach(b => {
+        b.style.background = 'rgba(100,100,100,0.4)';
+        b.style.borderColor = 'rgba(150,150,150,0.5)';
+        b.style.color = '#d0d0d0';
+      });
+      this.style.background = 'rgba(200,180,100,0.5)';
+      this.style.borderColor = 'rgba(200,180,100,0.8)';
+      this.style.color = '#ffcc66';
+      selectedMode = this.dataset.mode;
+    });
+  });
+  
+  // Set default mode as selected
+  const defaultModeBtn = document.querySelector('.bossModeBtn[data-mode="stand"]');
+  if (defaultModeBtn) {
+    defaultModeBtn.style.background = 'rgba(200,180,100,0.5)';
+    defaultModeBtn.style.borderColor = 'rgba(200,180,100,0.8)';
+    defaultModeBtn.style.color = '#ffcc66';
+  }
+  
+  // Create Custom Raid Button
+  const createBtn = document.getElementById('createCustomRaidBtn');
+  if (createBtn) {
+    createBtn.addEventListener('click', function() {
+      // Gather settings
+      const seedInput = document.getElementById('raidSeed');
+      const settings = {
+        seed: seedInput && seedInput.value.trim() ? seedInput.value.trim() : null,
+        bossHealth: parseInt(bossHealthSlider.value),
+        bossDamage: parseFloat(bossDamageSlider.value),
+        bossSpeed: parseFloat(bossSpeedSlider.value),
+        bossMode: selectedMode,
+        attacks: [],
+        mechanics: []
+      };
+      
+      // Get selected attacks
+      document.querySelectorAll('.attackCheckbox:checked').forEach(cb => {
+        settings.attacks.push(cb.dataset.attack);
+      });
+      
+      // Get selected mechanics
+      document.querySelectorAll('.mechanicCheckbox:checked').forEach(cb => {
+        settings.mechanics.push(cb.dataset.mechanic);
+      });
+      
+      // Validate
+      if (settings.attacks.length === 0) {
+        alert('Bitte mindestens eine Attacke auswählen!');
+        return;
+      }
+      
+      // Send to server
+      try {
+        webSocket.send(JSON.stringify({
+          event: 'createCustomRaid',
+          from: player.name,
+          settings: settings
+        }));
+      } catch (e) {
+        console.error('Failed to send custom raid settings:', e);
+      }
+      
+      // Close UI
+      customUI.style.display = 'none';
+    });
+  }
+  
+  // Cancel Button
+  const cancelBtn = document.getElementById('cancelCustomRaidBtn');
+  if (cancelBtn) {
+    cancelBtn.addEventListener('click', function() {
+      customUI.style.display = 'none';
+    });
+  }
+  
+  // Close Button (X)
+  const closeBtn = document.getElementById('customRaidClose');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', function() {
+      customUI.style.display = 'none';
+    });
+  }
+});

@@ -111,9 +111,9 @@ const SKILLS = {
         key: "shieldWall", 
         cd: 3000, 
         type: "selfBuff", 
-        dr: 0.55, // 55% damage reduction
+        dr: 0.65, // erhöht von 55% auf 65%
         dur: 3000, 
-        dmg: 4, // minimal damage
+        dmg: 4,
         vfx: { type: "ringPulse", radius: 28, r: 120, g: 200, b: 255, pulse: 30, fadeOut: true },
         effect: { sprite: "aura.blue", size: 100, duration: 1500 }
       },
@@ -122,7 +122,7 @@ const SKILLS = {
         cd: 5500, 
         type: "aoeMitigation", 
         radius: 180, 
-        dr: 0.40, // 40% reduction for nearby allies
+        dr: 0.50, // erhöht von 40% auf 50%
         dur: 4500, 
         dmg: 6,
         vfx: { type: "filledCircle", radius: 180, r: 80, g: 170, b: 255, alpha: 0.18 },
@@ -136,7 +136,7 @@ const SKILLS = {
         key: "burst", 
         cd: 2200, 
         type: "bossHit", 
-        dmg: 35, // high damage
+        dmg: 45, // erhöht von 35
         vfx: { type: "ringPulse", radius: 40, r: 255, g: 255, b: 120, pulse: 45, fadeOut: true },
         effect: { sprite: "explosion.yellow", size: 80, duration: 700 }
       },
@@ -144,9 +144,9 @@ const SKILLS = {
         key: "execute", 
         cd: 3800, 
         type: "bossExecute", 
-        dmg: 32, 
+        dmg: 42, // erhöht von 32
         bonusBelow: 0.35, 
-        bonusDmg: 22,
+        bonusDmg: 28, // erhöht von 22
         vfx: { type: "ringPulse", radius: 55, r: 255, g: 80, b: 80, pulse: 55, fadeOut: true },
         effect: { sprite: "explosion.red", size: 90, duration: 900 }
       },
@@ -159,8 +159,8 @@ const SKILLS = {
         cd: 1400, 
         type: "healLowestNear", 
         radius: 220, 
-        heal: 24, // strong single heal
-        dmg: 2, // minimal damage
+        heal: 32, // erhöht von 24
+        dmg: 2,
         vfx: { type: "ringPulse", radius: 24, r: 140, g: 255, b: 140, pulse: 25, fadeOut: true },
         effect: { sprite: "aura.green", size: 90, duration: 400 }
       },
@@ -169,7 +169,7 @@ const SKILLS = {
         cd: 4500, 
         type: "healAoE", 
         radius: 200, 
-        heal: 18, // strong AOE heal
+        heal: 24, // erhöht von 18
         dmg: 3,
         vfx: { type: "filledCircle", radius: 200, r: 140, g: 255, b: 140, alpha: 0.16 },
         effect: { sprite: "aura.lime", size: 140, duration: 800 }
@@ -214,24 +214,24 @@ function getPlayerStats(playerClass, role) {
   let maxHealth = 100;
   let armor = 0;
   
-  // Role-based stats
+  // Role-based stats (deutlichere Unterschiede)
   if (role === 'tank') {
-    maxHealth = 150;  // Tanks have 50% more HP
-    armor = 0.35;     // 35% damage reduction by default
+    maxHealth = 180;  // Tanks haben 80% mehr HP (von 150)
+    armor = 0.40;     // 40% damage reduction (von 35%)
   } else if (role === 'dd') {
-    maxHealth = 75;   // DDs are fragile
-    armor = 0.05;     // Very low defense
+    maxHealth = 70;   // DDs sind sehr fragile (von 75)
+    armor = 0.03;     // Minimale Defense (von 0.05)
   } else if (role === 'heal') {
-    maxHealth = 85;   // Healers are somewhat fragile
-    armor = 0.10;     // Low defense
+    maxHealth = 85;   // Healers bleiben gleich
+    armor = 0.10;
   }
   
   // Class-based adjustments
   if (playerClass === 'knight') {
-    maxHealth += 15;  // Knight is tankier
+    maxHealth += 15;  // Knight ist tankier
     armor += 0.05;
   } else if (playerClass === 'mage') {
-    maxHealth -= 5;   // Mage is squishier
+    maxHealth -= 5;   // Mage ist squishier
   } else if (playerClass === 'archer') {
     // Balanced
   }
@@ -913,6 +913,7 @@ function raidStart(raid) {
     p.y = 400 + Math.random() * 100;
     p.health = p.maxHealth;
     p.dead = false;
+    p.aggro = p.role === 'tank' ? 100 : 10; // Tanks start with higher aggro
     
     if (p.ws) {
       send(p.ws, { event: "raidJoined", raidId: raid.id, seed: raid.seed });
@@ -1037,11 +1038,13 @@ function spawnMechanicHazards(raid, mechanicDef, t) {
     for (let i = 0; i < count; i++) {
       const angle = Math.random() * Math.PI * 2;
       const speed = mechanicDef.speed || 120;
+      const x = 400 + Math.cos(angle) * 150;
+      const y = 300 + Math.sin(angle) * 150;
       
       raid.hazards.push({
         type: "movingHazard",
-        x: 400 + Math.cos(angle) * 150,
-        y: 300 + Math.sin(angle) * 150,
+        x: x,
+        y: y,
         vx: Math.cos(angle) * speed,
         vy: Math.sin(angle) * speed,
         radius: mechanicDef.radius || 80,
@@ -1050,16 +1053,44 @@ function spawnMechanicHazards(raid, mechanicDef, t) {
         startedAt: t,
         lastDamageAt: 0
       });
+      
+      // Spawn sprite for visual effect (optional)
+      if (mechanicDef.sprite) {
+        try {
+          for (const pid of raid.members) {
+            const p = playersById.get(pid);
+            if (!p || !p.ws) continue;
+            send(p.ws, { 
+              event: "spawnSpriteEffect", 
+              sprite: {
+                path: mechanicDef.sprite,
+                x: x,
+                y: y,
+                size: mechanicDef.radius * 2,
+                duration: mechanicDef.duration,
+                fadeOut: false,
+                pulse: true,
+                start: t
+              }
+            });
+          }
+        } catch (err) {
+          console.warn('[MECHANIC] Sprite error:', err);
+        }
+      }
     }
   } else if (mechanicDef.key === "checkerboard") {
     // Spawn checkerboard pattern
     const squareSize = mechanicDef.squareSize || 100;
     for (let x = 0; x < 800; x += squareSize * 2) {
       for (let y = 0; y < 600; y += squareSize * 2) {
+        const centerX = x + squareSize / 2;
+        const centerY = y + squareSize / 2;
+        
         raid.hazards.push({
           type: "checkerboard",
-          x: x + squareSize / 2,
-          y: y + squareSize / 2,
+          x: centerX,
+          y: centerY,
           squareSize: squareSize,
           radius: squareSize / 2,
           damage: mechanicDef.damage || 30,
@@ -1069,14 +1100,49 @@ function spawnMechanicHazards(raid, mechanicDef, t) {
         });
       }
     }
+    
+    // Only spawn a few sprite samples (not all squares)
+    if (mechanicDef.sprite) {
+      try {
+        for (let x = 0; x < 800; x += squareSize * 2) {
+          for (let y = 0; y < 600; y += squareSize * 2) {
+            const centerX = x + squareSize / 2;
+            const centerY = y + squareSize / 2;
+            
+            for (const pid of raid.members) {
+              const p = playersById.get(pid);
+              if (!p || !p.ws) continue;
+              send(p.ws, { 
+                event: "spawnSpriteEffect", 
+                sprite: {
+                  path: mechanicDef.sprite,
+                  x: centerX,
+                  y: centerY,
+                  size: squareSize * 0.8,
+                  duration: mechanicDef.duration,
+                  fadeOut: false,
+                  pulse: false,
+                  start: t
+                }
+              });
+            }
+          }
+        }
+      } catch (err) {
+        console.warn('[MECHANIC] Sprite error:', err);
+      }
+    }
   } else if (mechanicDef.key === "safeZone") {
     // Safe zone at boss center (only outside is dangerous)
     // Add a warning phase: first 2s no damage, then damage for the rest
     const warningTime = 2000; // ms
+    const centerX = raid.boss.x + 25;
+    const centerY = raid.boss.y + 25;
+    
     raid.hazards.push({
       type: "safeZone",
-      x: raid.boss.x + 25,
-      y: raid.boss.y + 25,
+      x: centerX,
+      y: centerY,
       safeRadius: mechanicDef.safeRadius || 150,
       radius: 500, // Large danger radius (entire arena is "outside")
       damage: mechanicDef.damage || 35,
@@ -1085,6 +1151,31 @@ function spawnMechanicHazards(raid, mechanicDef, t) {
       lastDamageAt: 0,
       warningUntil: t + warningTime
     });
+    
+    // Spawn sprite for visual effect (safe zone indicator)
+    if (mechanicDef.sprite) {
+      try {
+        for (const pid of raid.members) {
+          const p = playersById.get(pid);
+          if (!p || !p.ws) continue;
+          send(p.ws, { 
+            event: "spawnSpriteEffect", 
+            sprite: {
+              path: mechanicDef.sprite,
+              x: centerX,
+              y: centerY,
+              size: mechanicDef.safeRadius * 2,
+              duration: mechanicDef.duration + warningTime,
+              fadeOut: false,
+              pulse: true,
+              start: t
+            }
+          });
+        }
+      } catch (err) {
+        console.warn('[MECHANIC] Sprite error:', err);
+      }
+    }
   }
 }
 
@@ -1168,17 +1259,22 @@ function getZoneDR(raid, p) {
 }
 
 function applyRaidDamageOnce(raid, def, alivePlayers) {
+  // Broadcast sprite effect when damage is applied
+  if (def.sprite) {
+    broadcastRaidSpriteEffect(raid, def);
+  }
+  
   for (const p of alivePlayers) {
     if (p.dead || p.health <= 0) continue;
 
     const roleMult = (p.role === "tank") ? 0.7 : (p.role === "heal" ? 1.1 : 1.0);
     let hit = false;
 
-    if (def.key === "slam" || def.key === "bigSlam") {
+    if (def.key === "slam" || def.key === "bigSlam" || def.key === "firewave" || def.key === "meteor" || def.key === "darkOrb") {
       hit = distance(p.x + 25, p.y + 25, raid.boss.x, raid.boss.y) <= def.radius;
     }
 
-    if (def.key === "beam") {
+    if (def.key === "beam" || def.key === "iceShard" || def.key === "lightningStrike") {
       const tg = raid.telegraphs?.[0];
       if (!tg) continue;
 
@@ -1248,9 +1344,16 @@ setInterval(() => {
       continue;
     }
 
-    // boss target: prefer tank
-    const tank = alive.find(p => p.role === "tank");
-    raid.boss.targetId = (tank || alive[0]).id;
+    // boss target: highest aggro
+    alive.sort((a, b) => (b.aggro || 0) - (a.aggro || 0));
+    const target = alive[0];
+    raid.boss.targetId = target.id;
+    
+    // Aggro decay over time (5% per tick)
+    for (const p of alive) {
+      if (p.aggro) p.aggro = Math.max(10, p.aggro * 0.95);
+    }
+    
     updateBossMovement(raid, alive);
 
     const speed = raid.speedMult || 1;
@@ -1468,6 +1571,11 @@ function handleSkillCast(caster, msg) {
       }
       raid.boss.health = Math.max(0, raid.boss.health - def.dmg);
       raid.stats[caster.id].damage += def.dmg;
+      
+      // Damage generates aggro (reduced for DD role)
+      const aggroMult = caster.role === 'dd' ? 0.5 : (caster.role === 'tank' ? 1.5 : 1.0);
+      caster.aggro = (caster.aggro || 0) + (def.dmg * aggroMult);
+      
       vfxToRaid({ ...def.vfx, type: "cone", x: casterCx, y: casterCy, nx, ny, start: now(), duration: 240, fadeOut: true });
       send(caster.ws, { event: "combatText", text: `boss -${def.dmg}` , x: raid.boss.x, y: raid.boss.y });
       return;
@@ -1478,6 +1586,11 @@ function handleSkillCast(caster, msg) {
       if (dist <= def.radius) {
         raid.boss.health = Math.max(0, raid.boss.health - def.dmg);
         raid.stats[caster.id].damage += def.dmg;
+        
+        // Damage generates aggro
+        const aggroMult = caster.role === 'dd' ? 0.5 : (caster.role === 'tank' ? 1.5 : 1.0);
+        caster.aggro = (caster.aggro || 0) + (def.dmg * aggroMult);
+        
         send(caster.ws, { event: "combatText", text: `boss -${def.dmg}` , x: raid.boss.x, y: raid.boss.y });
       }
       vfxToRaid({ ...def.vfx, x: casterCx, y: casterCy, start: now(), duration: 350, fadeOut: true });
@@ -1492,6 +1605,11 @@ function handleSkillCast(caster, msg) {
       }
       raid.boss.health = Math.max(0, raid.boss.health - def.dmg);
       raid.stats[caster.id].damage += def.dmg;
+      
+      // Damage generates aggro (reduced for DD role)
+      const aggroMult = caster.role === 'dd' ? 0.5 : 1.0;
+      caster.aggro = (caster.aggro || 0) + (def.dmg * aggroMult);
+      
       const dx = raid.boss.x - casterCx;
       const dy = raid.boss.y - casterCy;
       const len = Math.sqrt(dx * dx + dy * dy) || 1;
@@ -1503,6 +1621,11 @@ function handleSkillCast(caster, msg) {
     if (def.type === "aoeCircleAtBoss") {
       raid.boss.health = Math.max(0, raid.boss.health - def.dmg);
       raid.stats[caster.id].damage += def.dmg;
+      
+      // Damage generates aggro (reduced for DD role)
+      const aggroMult = caster.role === 'dd' ? 0.5 : 1.0;
+      caster.aggro = (caster.aggro || 0) + (def.dmg * aggroMult);
+      
       vfxToRaid({ ...def.vfx, x: raid.boss.x, y: raid.boss.y, start: now(), duration: 650, fadeOut: true });
       send(caster.ws, { event: "combatText", text: `boss -${def.dmg}` , x: raid.boss.x, y: raid.boss.y });
       return;
@@ -1513,6 +1636,11 @@ function handleSkillCast(caster, msg) {
       if (dist > 260) return;
       raid.boss.health = Math.max(0, raid.boss.health - def.dmg);
       raid.stats[caster.id].damage += def.dmg;
+      
+      // Damage generates aggro (reduced for DD role)
+      const aggroMult = caster.role === 'dd' ? 0.5 : 1.0;
+      caster.aggro = (caster.aggro || 0) + (def.dmg * aggroMult);
+      
       vfxToRaid({ ...def.vfx, x: raid.boss.x, y: raid.boss.y, start: now(), duration: 350, fadeOut: true });
       send(caster.ws, { event: "combatText", text: `boss -${def.dmg}`, x: raid.boss.x, y: raid.boss.y });
       return;
@@ -1526,6 +1654,11 @@ function handleSkillCast(caster, msg) {
       if (pct <= def.bonusBelow) dmg += def.bonusDmg;
       raid.boss.health = Math.max(0, raid.boss.health - dmg);
       raid.stats[caster.id].damage += dmg;
+      
+      // Damage generates aggro (reduced for DD role)
+      const aggroMult = caster.role === 'dd' ? 0.5 : 1.0;
+      caster.aggro = (caster.aggro || 0) + (dmg * aggroMult);
+      
       vfxToRaid({ ...def.vfx, x: raid.boss.x, y: raid.boss.y, start: now(), duration: 380, fadeOut: true });
       send(caster.ws, { event: "combatText", text: 'boss -' + dmg, x: raid.boss.x, y: raid.boss.y });
       return;
@@ -1535,6 +1668,12 @@ function handleSkillCast(caster, msg) {
       caster.buffs = caster.buffs || [];
       caster.buffs.push({ key: def.key, until: now() + def.dur, dr: def.dr });
       raid.stats[caster.id].protection += 1;
+      
+      // Tank skill generates aggro
+      if (caster.role === 'tank') {
+        caster.aggro = (caster.aggro || 0) + 150;
+      }
+      
       vfxToRaid({ ...def.vfx, x: casterCx, y: casterCy, start: now(), duration: def.dur, fadeOut: false });
       send(caster.ws, { event: "combatText", text: 'SHIELD', x: casterCx, y: caster.y });
       return;
@@ -1544,6 +1683,12 @@ function handleSkillCast(caster, msg) {
       raid.mitigationZones = raid.mitigationZones || [];
       raid.mitigationZones.push({ key: def.key, x: casterCx, y: casterCy, radius: def.radius, dr: def.dr, until: now() + def.dur });
       raid.stats[caster.id].protection += 1;
+      
+      // Tank AoE skill generates massive aggro
+      if (caster.role === 'tank') {
+        caster.aggro = (caster.aggro || 0) + 250;
+      }
+      
       vfxToRaid({ ...def.vfx, x: casterCx, y: casterCy, start: now(), duration: def.dur, fadeOut: false });
       send(caster.ws, { event: "combatText", text: 'PROTECT', x: casterCx, y: caster.y });
       return;
@@ -1557,6 +1702,10 @@ function handleSkillCast(caster, msg) {
       const healed = clamp(def.heal, 0, target.maxHealth - target.health);
       target.health = clamp(target.health + healed, 0, target.maxHealth);
       raid.stats[caster.id].healing += healed;
+      
+      // Healing generates minimal aggro (healers should stay low threat)
+      caster.aggro = (caster.aggro || 0) + (healed * 0.2);
+      
       vfxToRaid({ ...def.vfx, x: target.x + 25, y: target.y + 25, start: now(), duration: 320, fadeOut: true });
       send(target.ws, { event: "combatText", text: '+' + healed, x: target.x + 25, y: target.y });
       return;
@@ -1574,6 +1723,10 @@ function handleSkillCast(caster, msg) {
         send(p.ws, { event: "combatText", text: '+' + healed, x: p.x + 25, y: p.y });
       }
       raid.stats[caster.id].healing += totalHealed;
+      
+      // AoE Healing generates minimal aggro
+      caster.aggro = (caster.aggro || 0) + (totalHealed * 0.15);
+      
       return;
     }
   }
@@ -2007,5 +2160,67 @@ function broadcastRaidVfx(raid, shapes) {
     for (const shape of shapes) {
       send(p.ws, { event: "skillVfx", shape });
     }
+  }
+}
+
+function broadcastRaidSpriteEffect(raid, def) {
+  // Make sprites optional - only send if sprite exists
+  if (!def.sprite) return;
+  
+  const t = now();
+  
+  try {
+    // Spawn sprite effects based on attack type
+    if (def.key === "slam" || def.key === "bigSlam" || def.key === "firewave" || def.key === "meteor" || def.key === "darkOrb") {
+      // Circle AoE - spawn sprite at boss location
+      for (const pid of raid.members) {
+        const p = playersById.get(pid);
+        if (!p || !p.ws) continue;
+        send(p.ws, { 
+          event: "spawnSpriteEffect", 
+          sprite: {
+            path: def.sprite,
+            x: raid.boss.x + 25,
+            y: raid.boss.y + 25,
+            size: def.spriteSize || 100,
+            duration: 600,
+            fadeOut: true,
+            pulse: def.key === "meteor",
+            start: t
+          }
+        });
+      }
+    } else if (def.key === "beam" || def.key === "iceShard" || def.key === "lightningStrike") {
+      // Beam attack - spawn multiple sprites along the beam
+      const tg = raid.telegraphs?.[0];
+      if (!tg) return;
+      
+      const numSprites = 5;
+      for (let i = 0; i < numSprites; i++) {
+        const progress = i / (numSprites - 1);
+        const x = raid.boss.x + tg.nx * def.length * progress;
+        const y = raid.boss.y + tg.ny * def.length * progress;
+        
+        for (const pid of raid.members) {
+          const p = playersById.get(pid);
+          if (!p || !p.ws) continue;
+          send(p.ws, { 
+            event: "spawnSpriteEffect", 
+            sprite: {
+              path: def.sprite,
+              x: x,
+              y: y,
+              size: def.spriteSize || 80,
+              duration: 500,
+              fadeOut: true,
+              rotate: def.key === "lightningStrike",
+              start: t + (i * 50)
+            }
+          });
+        }
+      }
+    }
+  } catch (err) {
+    console.error('[SPRITE] Error broadcasting sprite effect:', err);
   }
 }

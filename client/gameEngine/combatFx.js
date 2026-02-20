@@ -1,7 +1,20 @@
-var fx = { shapes: [], texts: [] };
+var fx = { shapes: [], texts: [], sprites: [] };
+
+// Sprite-Sheet Cache
+const spriteCache = new Map();
+
+// Load sprite sheet
+function loadSpriteSheet(path) {
+  if (spriteCache.has(path)) return spriteCache.get(path);
+  const img = new Image();
+  img.src = path;
+  spriteCache.set(path, img);
+  return img;
+}
 
 function fxAddShape(s) { fx.shapes.push(s); }
 function fxAddText(t) { fx.texts.push(t); }
+function fxAddSprite(s) { fx.sprites.push(s); }
 
 function fxRenderAndUpdate() {
   const t = Date.now();
@@ -28,6 +41,14 @@ function fxRenderAndUpdate() {
       context.beginPath();
       context.arc(s.x, s.y, s.radius, 0, Math.PI*2);
       context.fill();
+      
+      // Add pulsing border for better visibility
+      if (s.warning) {
+        const pulseAlpha = 0.4 + 0.3 * Math.sin(t / 150);
+        context.lineWidth = 3;
+        context.strokeStyle = `rgba(255,100,100,${pulseAlpha})`;
+        context.stroke();
+      }
     }
 
     if (s.type === "ringPulse") {
@@ -73,6 +94,51 @@ function fxRenderAndUpdate() {
       context.beginPath();
       context.arc(s.x, s.y, r, a1, a2);
       context.stroke();
+    }
+  }
+
+  // SPRITE EFFECTS
+  for (let i = fx.sprites.length - 1; i >= 0; i--) {
+    try {
+      const sprite = fx.sprites[i];
+      const age = t - sprite.start;
+      if (age > sprite.duration) { fx.sprites.splice(i, 1); continue; }
+
+      // Skip if no path
+      if (!sprite.path) continue;
+
+      const img = loadSpriteSheet(sprite.path);
+      
+      // Skip if image not loaded yet
+      if (!img || !img.complete || img.naturalWidth === 0) continue;
+
+      const p = age / sprite.duration;
+      const alpha = sprite.fadeOut ? (1 - p) : 1;
+      
+      // Calculate scale with pulse effect
+      let scale = sprite.scale ?? 1.0;
+      if (sprite.pulse) {
+        scale *= (1 + 0.2 * Math.sin(p * Math.PI * 4));
+      }
+      
+      const w = (sprite.size ?? 64) * scale;
+      const h = (sprite.size ?? 64) * scale;
+      
+      context.save();
+      context.globalAlpha = Math.max(0, Math.min(1, alpha));
+      context.translate(sprite.x, sprite.y);
+      
+      // Rotation animation
+      if (sprite.rotate) {
+        context.rotate(p * Math.PI * 4);
+      }
+      
+      context.drawImage(img, -w/2, -h/2, w, h);
+      context.restore();
+    } catch (err) {
+      // Silently ignore sprite rendering errors
+      console.warn('Sprite rendering error:', err);
+      fx.sprites.splice(i, 1);
     }
   }
 

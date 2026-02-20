@@ -233,6 +233,26 @@ function showVictoryOverlay() {
     }
     return;
   }
+  
+  // NEW: Handle sprite effects from boss attacks
+  if (messageData.event === "spawnSpriteEffect") {
+    const sprite = messageData.sprite;
+    if (sprite && sprite.path) {
+      fxAddSprite({
+        path: sprite.path,
+        x: sprite.x,
+        y: sprite.y,
+        size: sprite.size || 100,
+        start: sprite.start || Date.now(),
+        duration: sprite.duration || 600,
+        fadeOut: sprite.fadeOut !== undefined ? sprite.fadeOut : true,
+        pulse: sprite.pulse || false,
+        rotate: sprite.rotate || false,
+        scale: sprite.scale || 1.0
+      });
+    }
+    return;
+  }
 
   if (messageData.event === "lobbySnapshot") {
     var lobbyArray = messageData.lobby;

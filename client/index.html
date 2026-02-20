@@ -390,23 +390,53 @@
                 <!-- Attack Selection -->
                 <div class="customRaidSetting" style="margin-top:18px;">
                     <label style="display:block; margin-bottom:10px; font-weight:bold; color:#ffcc66; font-size:14px;">Boss Attacken:</label>
-                    <div style="background:rgba(0,0,0,0.3); padding:12px; border-radius:6px; border:1px solid rgba(200,180,100,0.2);">
-                        <div style="margin-bottom:10px;">
-                            <label style="display:flex; align-items:center; gap:8px; padding:8px; background:rgba(200,180,100,0.1); border-radius:4px; cursor:pointer;">
+                    <div style="background:rgba(0,0,0,0.3); padding:12px; border-radius:6px; border:1px solid rgba(200,180,100,0.2); max-height:200px; overflow-y:auto;">
+                        <div style="margin-bottom:8px;">
+                            <label style="display:flex; align-items:center; gap:8px; padding:6px; background:rgba(200,180,100,0.1); border-radius:4px; cursor:pointer;">
                                 <input type="checkbox" class="attackCheckbox" data-attack="slam" checked style="width:18px; height:18px; cursor:pointer;">
-                                <span style="flex:1; color:#d0c0a0;">Slam (18 Schaden, 120 Radius)</span>
+                                <span style="flex:1; color:#d0c0a0; font-size:13px;">💥 Slam (18 Schaden, 120 Radius)</span>
                             </label>
                         </div>
-                        <div style="margin-bottom:10px;">
-                            <label style="display:flex; align-items:center; gap:8px; padding:8px; background:rgba(200,180,100,0.1); border-radius:4px; cursor:pointer;">
+                        <div style="margin-bottom:8px;">
+                            <label style="display:flex; align-items:center; gap:8px; padding:6px; background:rgba(200,180,100,0.1); border-radius:4px; cursor:pointer;">
                                 <input type="checkbox" class="attackCheckbox" data-attack="bigSlam" checked style="width:18px; height:18px; cursor:pointer;">
-                                <span style="flex:1; color:#d0c0a0;">Big Slam (28 Schaden, 170 Radius)</span>
+                                <span style="flex:1; color:#d0c0a0; font-size:13px;">💥 Big Slam (28 Schaden, 170 Radius)</span>
+                            </label>
+                        </div>
+                        <div style="margin-bottom:8px;">
+                            <label style="display:flex; align-items:center; gap:8px; padding:6px; background:rgba(200,180,100,0.1); border-radius:4px; cursor:pointer;">
+                                <input type="checkbox" class="attackCheckbox" data-attack="beam" checked style="width:18px; height:18px; cursor:pointer;">
+                                <span style="flex:1; color:#d0c0a0; font-size:13px;">⚡ Beam (22 Schaden, 330 Länge)</span>
+                            </label>
+                        </div>
+                        <div style="margin-bottom:8px;">
+                            <label style="display:flex; align-items:center; gap:8px; padding:6px; background:rgba(200,180,100,0.1); border-radius:4px; cursor:pointer;">
+                                <input type="checkbox" class="attackCheckbox" data-attack="firewave" style="width:18px; height:18px; cursor:pointer;">
+                                <span style="flex:1; color:#d0c0a0; font-size:13px;">🔥 Firewave (20 Schaden, 140 Radius)</span>
+                            </label>
+                        </div>
+                        <div style="margin-bottom:8px;">
+                            <label style="display:flex; align-items:center; gap:8px; padding:6px; background:rgba(200,180,100,0.1); border-radius:4px; cursor:pointer;">
+                                <input type="checkbox" class="attackCheckbox" data-attack="iceShard" style="width:18px; height:18px; cursor:pointer;">
+                                <span style="flex:1; color:#d0c0a0; font-size:13px;">❄️ Ice Shard (24 Schaden, 300 Länge)</span>
+                            </label>
+                        </div>
+                        <div style="margin-bottom:8px;">
+                            <label style="display:flex; align-items:center; gap:8px; padding:6px; background:rgba(200,180,100,0.1); border-radius:4px; cursor:pointer;">
+                                <input type="checkbox" class="attackCheckbox" data-attack="meteor" style="width:18px; height:18px; cursor:pointer;">
+                                <span style="flex:1; color:#d0c0a0; font-size:13px;">☄️ Meteor (32 Schaden, 150 Radius)</span>
+                            </label>
+                        </div>
+                        <div style="margin-bottom:8px;">
+                            <label style="display:flex; align-items:center; gap:8px; padding:6px; background:rgba(200,180,100,0.1); border-radius:4px; cursor:pointer;">
+                                <input type="checkbox" class="attackCheckbox" data-attack="darkOrb" style="width:18px; height:18px; cursor:pointer;">
+                                <span style="flex:1; color:#d0c0a0; font-size:13px;">🌑 Dark Orb (21 Schaden, 130 Radius)</span>
                             </label>
                         </div>
                         <div>
-                            <label style="display:flex; align-items:center; gap:8px; padding:8px; background:rgba(200,180,100,0.1); border-radius:4px; cursor:pointer;">
-                                <input type="checkbox" class="attackCheckbox" data-attack="beam" checked style="width:18px; height:18px; cursor:pointer;">
-                                <span style="flex:1; color:#d0c0a0;">Beam (22 Schaden, 330 Länge)</span>
+                            <label style="display:flex; align-items:center; gap:8px; padding:6px; background:rgba(200,180,100,0.1); border-radius:4px; cursor:pointer;">
+                                <input type="checkbox" class="attackCheckbox" data-attack="lightningStrike" style="width:18px; height:18px; cursor:pointer;">
+                                <span style="flex:1; color:#d0c0a0; font-size:13px;">⚡ Lightning Strike (25 Schaden, 350 Länge)</span>
                             </label>
                         </div>
                     </div>
@@ -416,22 +446,40 @@
                 <div class="customRaidSetting" style="margin-top:18px;">
                     <label style="display:block; margin-bottom:10px; font-weight:bold; color:#ffcc66; font-size:14px;">Raid Mechaniken:</label>
                     <div style="background:rgba(0,0,0,0.3); padding:12px; border-radius:6px; border:1px solid rgba(200,180,100,0.2);">
-                        <div style="margin-bottom:10px;">
-                            <label style="display:flex; align-items:center; gap:8px; padding:8px; background:rgba(200,180,100,0.1); border-radius:4px; cursor:pointer;">
+                        <div style="margin-bottom:8px;">
+                            <label style="display:flex; align-items:center; gap:8px; padding:6px; background:rgba(200,180,100,0.1); border-radius:4px; cursor:pointer;">
                                 <input type="checkbox" class="mechanicCheckbox" data-mechanic="movingHazard" checked style="width:18px; height:18px; cursor:pointer;">
-                                <span style="flex:1; color:#d0c0a0;">Moving Hazard (25 Schaden)</span>
+                                <span style="flex:1; color:#d0c0a0; font-size:13px;">🌀 Moving Hazard (25 Schaden)</span>
                             </label>
                         </div>
-                        <div style="margin-bottom:10px;">
-                            <label style="display:flex; align-items:center; gap:8px; padding:8px; background:rgba(200,180,100,0.1); border-radius:4px; cursor:pointer;">
+                        <div style="margin-bottom:8px;">
+                            <label style="display:flex; align-items:center; gap:8px; padding:6px; background:rgba(200,180,100,0.1); border-radius:4px; cursor:pointer;">
                                 <input type="checkbox" class="mechanicCheckbox" data-mechanic="checkerboard" checked style="width:18px; height:18px; cursor:pointer;">
-                                <span style="flex:1; color:#d0c0a0;">Checkerboard (30 Schaden)</span>
+                                <span style="flex:1; color:#d0c0a0; font-size:13px;">♟️ Checkerboard (30 Schaden)</span>
+                            </label>
+                        </div>
+                        <div style="margin-bottom:8px;">
+                            <label style="display:flex; align-items:center; gap:8px; padding:6px; background:rgba(200,180,100,0.1); border-radius:4px; cursor:pointer;">
+                                <input type="checkbox" class="mechanicCheckbox" data-mechanic="safeZone" checked style="width:18px; height:18px; cursor:pointer;">
+                                <span style="flex:1; color:#d0c0a0; font-size:13px;">🛡️ Safe Zone (35 Schaden)</span>
+                            </label>
+                        </div>
+                        <div style="margin-bottom:8px;">
+                            <label style="display:flex; align-items:center; gap:8px; padding:6px; background:rgba(200,180,100,0.1); border-radius:4px; cursor:pointer;">
+                                <input type="checkbox" class="mechanicCheckbox" data-mechanic="voidZones" style="width:18px; height:18px; cursor:pointer;">
+                                <span style="flex:1; color:#d0c0a0; font-size:13px;">🌫️ Void Zones (28 Schaden)</span>
+                            </label>
+                        </div>
+                        <div style="margin-bottom:8px;">
+                            <label style="display:flex; align-items:center; gap:8px; padding:6px; background:rgba(200,180,100,0.1); border-radius:4px; cursor:pointer;">
+                                <input type="checkbox" class="mechanicCheckbox" data-mechanic="spinningBlades" style="width:18px; height:18px; cursor:pointer;">
+                                <span style="flex:1; color:#d0c0a0; font-size:13px;">🗡️ Spinning Blades (32 Schaden)</span>
                             </label>
                         </div>
                         <div>
-                            <label style="display:flex; align-items:center; gap:8px; padding:8px; background:rgba(200,180,100,0.1); border-radius:4px; cursor:pointer;">
-                                <input type="checkbox" class="mechanicCheckbox" data-mechanic="safeZone" checked style="width:18px; height:18px; cursor:pointer;">
-                                <span style="flex:1; color:#d0c0a0;">Safe Zone (35 Schaden)</span>
+                            <label style="display:flex; align-items:center; gap:8px; padding:6px; background:rgba(200,180,100,0.1); border-radius:4px; cursor:pointer;">
+                                <input type="checkbox" class="mechanicCheckbox" data-mechanic="bloodPool" style="width:18px; height:18px; cursor:pointer;">
+                                <span style="flex:1; color:#d0c0a0; font-size:13px;">🩸 Blood Pool (26 Schaden)</span>
                             </label>
                         </div>
                     </div>

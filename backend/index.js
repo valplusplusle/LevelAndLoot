@@ -90,7 +90,7 @@ const SKILLS = {
       range: 280, 
       dmg: 13,
       vfx: { type: "beam", length: 280, width: 6, r: 200, g: 200, b: 200 },
-      effect: { sprite: "hit.orange", size: 40, duration: 400 }
+      effect: { sprite: "hit.white", size: 40, duration: 400 }
     },
     2: { 
       key: "arrowRain", 
@@ -99,7 +99,7 @@ const SKILLS = {
       radius: 150, 
       dmg: 10,
       vfx: { type: "circle", radius: 150, r: 220, g: 220, b: 220 },
-      effect: { sprite: "explosion.orange", size: 90, duration: 800 }
+      effect: { sprite: "explosion.white", size: 90, duration: 800 }
     }
   },
   
@@ -126,7 +126,7 @@ const SKILLS = {
         dur: 4500, 
         dmg: 6,
         vfx: { type: "filledCircle", radius: 180, r: 80, g: 170, b: 255, alpha: 0.18 },
-        effect: { sprite: "aura.blue", size: 140, duration: 2200 }
+        effect: { sprite: "aura.cyan", size: 140, duration: 2200 }
       },
     },
     
@@ -138,7 +138,7 @@ const SKILLS = {
         type: "bossHit", 
         dmg: 35, // high damage
         vfx: { type: "ringPulse", radius: 40, r: 255, g: 255, b: 120, pulse: 45, fadeOut: true },
-        effect: { sprite: "explosion.orange", size: 80, duration: 700 }
+        effect: { sprite: "explosion.yellow", size: 80, duration: 700 }
       },
       4: { 
         key: "execute", 
@@ -162,7 +162,7 @@ const SKILLS = {
         heal: 24, // strong single heal
         dmg: 2, // minimal damage
         vfx: { type: "ringPulse", radius: 24, r: 140, g: 255, b: 140, pulse: 25, fadeOut: true },
-        effect: { sprite: "aura.lime", size: 90, duration: 400 }
+        effect: { sprite: "aura.green", size: 90, duration: 400 }
       },
       4: { 
         key: "aoeHeal", 
@@ -250,9 +250,73 @@ function markCast(player, def) { player.cooldowns[def.key] = now(); }
 // Boss attack pool
 // ---------------------------
 const RAID_ATTACK_POOL = [
-  { key: "slam", windup: 800, active: 600, cooldown: 600, radius: 120, damage: 18 },
-  { key: "bigSlam", windup: 1200, active: 800, cooldown: 800, radius: 170, damage: 28 },
-  { key: "beam", windup: 900, active: 900, cooldown: 700, width: 50, length: 330, damage: 22 },
+  { 
+    key: "slam", 
+    windup: 800, 
+    active: 600, 
+    cooldown: 600, 
+    radius: 120, 
+    damage: 18
+  },
+  { 
+    key: "bigSlam", 
+    windup: 1200, 
+    active: 800, 
+    cooldown: 800, 
+    radius: 170, 
+    damage: 28
+  },
+  { 
+    key: "beam", 
+    windup: 900, 
+    active: 900, 
+    cooldown: 700, 
+    width: 50, 
+    length: 330, 
+    damage: 22
+  },
+  { 
+    key: "firewave", 
+    windup: 1000, 
+    active: 700, 
+    cooldown: 700, 
+    radius: 140, 
+    damage: 20
+  },
+  { 
+    key: "iceShard", 
+    windup: 850, 
+    active: 650, 
+    cooldown: 650, 
+    width: 40, 
+    length: 300, 
+    damage: 24
+  },
+  { 
+    key: "meteor", 
+    windup: 1400, 
+    active: 900, 
+    cooldown: 900, 
+    radius: 150, 
+    damage: 32
+  },
+  { 
+    key: "darkOrb", 
+    windup: 950, 
+    active: 750, 
+    cooldown: 750, 
+    radius: 130, 
+    damage: 21
+  },
+  { 
+    key: "lightningStrike", 
+    windup: 800, 
+    active: 600, 
+    cooldown: 600, 
+    width: 60, 
+    length: 350, 
+    damage: 25
+  },
 ];
 
 function raidAttackDef(key) { return RAID_ATTACK_POOL.find(a => a.key === key); }
@@ -268,7 +332,7 @@ const MECHANIC_POOL = [
     radius: 80,
     speed: 120,
     damage: 25,
-    weight: 40 
+    weight: 40
   },
   { 
     key: "checkerboard", 
@@ -276,7 +340,7 @@ const MECHANIC_POOL = [
     duration: 6000,
     squareSize: 100,
     damage: 30,
-    weight: 30 
+    weight: 30
   },
   { 
     key: "safeZone", 
@@ -284,7 +348,32 @@ const MECHANIC_POOL = [
     duration: 5000,
     safeRadius: 150,
     damage: 35,
-    weight: 30 
+    weight: 30
+  },
+  { 
+    key: "voidZones", 
+    name: "Void Zones",
+    duration: 5500,
+    radius: 90,
+    damage: 28,
+    weight: 25
+  },
+  { 
+    key: "spinningBlades", 
+    name: "Spinning Blades",
+    duration: 4500,
+    radius: 70,
+    speed: 150,
+    damage: 32,
+    weight: 20
+  },
+  { 
+    key: "bloodPool", 
+    name: "Blood Pool",
+    duration: 6000,
+    radius: 100,
+    damage: 26,
+    weight: 25
   }
 ];
 

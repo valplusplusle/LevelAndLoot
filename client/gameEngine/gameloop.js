@@ -382,10 +382,12 @@ function renderRaidBoss(raid) {
 
   // Update boss animation state based on raid phase
   let newState = 'idle';
-  if (raid.currentAttack) {
+  if (raid.phase === 'active') {
+    // Boss is actively attacking
     newState = 'attack';
-  } else if (raid.boss.health < raid.boss.maxHealth * 0.3) {
-    // Could use hurt state if health is low
+  } else if (raid.boss.anim === 'walk') {
+    // Boss is moving
+    newState = 'walk';
   }
   
   // Update animation frame
